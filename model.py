@@ -11,7 +11,9 @@ class Model:
     def izbrisi_recept(self, indeks):
         self.knjiznica.pop(indeks)
 
-    
+    def dodaj_recept(self, ime, kolicina, enota):
+        recept = self.knjiznica()
+
     def dodaj_element(self, ime, kolicina, enota):
         element = Element(self, ime, kolicina, enota)
         if ime not in self.listek.keys():
