@@ -1,6 +1,8 @@
 from model import Model
 
-model = Model()
+DATOTEKA_RECEPTOV = 'recepti.json'
+DATOTEKA_ELEMENTOV = 'elementi.json'
+model = Model.preberi_iz_datoteke(IME_DATOTEKE)
 
 def tekstovni_vmesnik():
     prikazi_pozdravno_sporocilo()
@@ -8,26 +10,29 @@ def tekstovni_vmesnik():
         osnovni_zaslon()
 
 NAPISI_RECEPT = 'napiši recept'
-DODAJ_RECEPT = 'dodaj recept'
 DODAJ_ELEMENT = 'dodaj element'
+ZAKLJUCI = 'zaključi'
 
 def osnovni_zaslon():
-    prikazi_recepte_in_listek()
-    ukaz = preberi_ukaz()
-    if ukaz == NAPISI_RECEPT:
-        napisi_recept()
-    elif ukaz == DODAJ_RECEPT:
-        dodaj_recept()
-    elif ukaz == DODAJ_ELEMENT:
-        dodaj_element()
+    while True:
+        ukaz = preberi_ukaz()
+        if ukaz == NAPISI_RECEPT:
+            napisi_recept()
+        elif ukaz == DODAJ_ELEMENT:
+            dodaj_element()
+        elif ukaz == ZAKLJUCI:
+            model.shrani_v_datoteko(IME_DATOTEKE)
+            print('Nasvidenje!')
+            break
 
 
 
-def dodaj_recept():
+def napisi_recept():
     ime = input('Ime recepta> ')
-    kolicina = input('Količina> ')
-    enota = input('Enota> ')
-    model.listek.dodaj_recept(ime, kolicina, enota)
+    velikost = input('Velikost> ')
+    sestavine = input('Sestavine> ')
+    postopek = input('Postopek> ')
+    model.knjiznica.dodaj_recept(ime, velikost, sestavine, postopek)
 
 
 def dodaj_element():
