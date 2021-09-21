@@ -63,6 +63,18 @@ class Model:
             slovar_elementov = self.elemente_v_slovar
             json.dump(slovar_elementov, dat)
 
+    @staticmethod
+    def nalozi_recepte(ime_datoteke):
+        with open(ime_datoteke) as dat:
+            slovar_receptov = json.load(dat)
+            return Model.recepte_iz_slovarja(slovar_receptov)
+    
+    @staticmethod
+    def nalozi_elemente(ime_datoteke):
+        with open(ime_datoteke) as dat:
+            slovar_elementov = json.load(dat)
+            return Model.elemente_iz_slovarja(slovar_elementov)
+
 
 
 class Recept:
