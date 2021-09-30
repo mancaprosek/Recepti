@@ -1,4 +1,5 @@
-from tekstovni_vmesnik import dodaj_element
+
+#A ni tko da se nesmem na tekstovni vmesnik sklicevat?
 
 import json
 
@@ -11,13 +12,16 @@ class Model:
     def napisi_recept(self, ime, velikost,  sestavine, postopek):
         recept = Recept(ime, velikost, sestavine, postopek)
         self.knjiznica.append(recept)
+    #A rabim tkole napisat to drugo vrstico?
     
     def izbrisi_recept(self, indeks):
         self.knjiznica.pop(indeks)
+    #od kje dobimo ta indeks?
 
     def dodaj_element(self, ime, kolicina, enota):
         element = Element(self, ime, kolicina, enota)
         self.listek.append(element)
+    #Isto kot 15.. a je druga vrstica potrebna
     
     def izbrisi_element(self, indeks):
         self.listek.pop(indeks)
@@ -27,16 +31,20 @@ class Model:
 
     
 
+    #Tale cela zadeva z zapisovanjem je za popravit
+    #ker imamo samo eno json datoteko
+    #Kako to narediš, da združiš...?
+
     def recepte_v_slovar(self):
         return {
             'ime': self.knjiznica,
-            'recepti': [recept.v_slovar() for recept in self.knjiznica]
+            'recepti': [Recept.v_slovar() for recept in self.knjiznica]
         }
     
     def elemente_v_slovar(self):
         return {
             'ime': self.listek ,
-            'elementi': [element.v_slovar() for element in self.listek]
+            'elementi': [Element.v_slovar() for element in self.listek]
         }
     
 
@@ -87,6 +95,7 @@ class Recept:
     def dodaj_sestavino(self, ime, kolicina, enota):
         sestavina = Sestavina(ime, kolicina, enota)
         self.sestavine.append(sestavina)
+    #druga vrstica potrebna?
     
 
     def v_slovar(self):
@@ -118,6 +127,8 @@ class Sestavina:
         self.kolicina = kolicina
         self.enota = enota
 
+    #a so enote potrebne, pomojem se da to lepš nardit
+
     #moram tukaj kaj posebaj še dati za spreminjanje? a sploh rabim te razrede?
 
 
@@ -127,6 +138,7 @@ class Element:
         self.kolicina = kolicina
         self.enota = enota
     
+    #enote res rabimo??
 
     def v_slovar(self):
         return {
