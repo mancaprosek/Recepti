@@ -20,6 +20,10 @@ def vnesi_stevilo(x):
         
 
 def izberi(seznam):
+    if len(seznam) == 1:
+        opis, element = seznam[0]
+        print(f"Na voljo je samo {opis}.")
+        return element
     for indeks, (opis, _) in enumerate(seznam, 1):
         print(f"{indeks}) {opis}")
     while True:
@@ -113,7 +117,16 @@ def uredi_recept():
 
 
 def poglej_recept():
-    pass
+    print("Izberi recept, ki ga želiš pogledati.")
+    izbran_recept = izberi(model.knjiznica)    
+    (ime, velikost, sestavine, postopek) = izbran_recept()
+
+    print("Ime: {ime}")
+    print("Velikost: {velikost}")
+    print("Sestavine: {sestavine}")
+    print("Postopek: {postopek}")
+
+
 
 
 def dodaj_element():
@@ -124,7 +137,13 @@ def dodaj_element():
 
 
 def izbrisi_listek():
-    pass
+    if (
+        input(f"Ali si prepričan, da želiš izbrisati listek? [da/ne]") == "da"
+    ):
+        model.izbrisi_listek(model.listek)
+        print("Listek je bil uspešno izbrisan.")
+    else:
+        print("Brisanje je bilo preklicano, listek ostaja nespremenjen.")
 
 
 
