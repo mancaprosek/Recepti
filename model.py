@@ -13,7 +13,13 @@ class Model:
         recept = Recept(ime, velikost, sestavine, postopek)
         self.knjiznica.append(recept)
     #A rabim tkole napisat to drugo vrstico?
-    
+
+    def poglej_recept(self, indeks):
+        pass
+    #A morta bit ta dva res tukiii??
+    def uredi_recept(self, indeks):
+        pass
+
     def izbrisi_recept(self, indeks):
         self.knjiznica.pop(indeks)
     #od kje dobimo ta indeks?

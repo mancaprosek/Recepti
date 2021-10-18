@@ -41,45 +41,27 @@ def izberi(seznam):
 
 
 def tekstovni_vmesnik():
-    uvodni_pozdrav()
+    print('Pozdravljeni!')
+
     while True:
         try:
-            print('Izberi eno od možnosti.')
-            moznosti1 = [
+            print('S čim se želiš ukvarjati? Izberi.')
+            moznosti = [
                 ("recepti", pokazi_recepte),
-                ("listek", pokazi_listek)
+                ("listkom", pokazi_listek),
+                ("napisati recept", napisi_recept),
+                ("pogledati recept", poglej_recept),
+                ("urediti recept", uredi_recept),
+                ("izbrisati recept", izbrisi_recept),
+                ("dodati element", dodaj_element),
+                ("izbrisati listek", izbrisi_listek)
             ]
-            izbira1 = izberi(moznosti1)
+            izbira = izberi(moznosti)
             print(30 * "-")
-            izbira1()
+            izbira()
             print()
-
-            if izbira1() == pokazi_recepte:
-                print("Kaj želiš storiti?")
-                print("Izberi možnost.")
-                moznosti2 = [
-                    ("napisati recept", napisi_recept),
-                    ("urediti recept", uredi_recept),
-                    ("pogledati recept", poglej_recept)
-                ]
-                izbira2 = izberi(moznosti2)
-                print(30 * "-")
-                izbira2()
-                print()
-                model.shrani_recepte(IME_DATOTEKE)
-
-            elif izbira1() == pokazi_listek:
-                print("Kaj želiš storiti?")
-                print("Izberi možnost.")
-                moznosti2 = [
-                    ("dodati element", dodaj_element),
-                    ("izbrisati listek", izbrisi_listek),
-                ]
-                izbira2 = izberi(moznosti2)
-                print(30 * "-")
-                izbira2()
-                print()
-                model.shrani_elemente(IME_DATOTEKE)
+            #model.shrani_recepte(IME_DATOTEKE)
+            #model.shrani_elemente(IME_DATOTEKE)
 
         except ValueError as e:
             print(e.args[0])
@@ -91,17 +73,15 @@ def tekstovni_vmesnik():
 
 
 
-def uvodni_pozdrav():
-    print('Pozdravljeni!')
-
-
 
 def pokazi_recepte():
-    pass
+    for (ime, velikost, sestavine, postopek) in model.knjiznica:
+        print(ime)
 
 
 def pokazi_listek():
-    pass
+    for (ime, kolicina, enota) in model.listek:
+        print(ime)
 
 
 def napisi_recept():
@@ -111,14 +91,13 @@ def napisi_recept():
     postopek = input('Postopek> ')
     model.knjiznica.append((ime, velikost, sestavine, postopek))
 
-
-def uredi_recept():
-    pass
-
+#Pri poglej in uredi napiše, da je pričakoval 2 values,
+#ampak da jih je too many.. ne štekam? Mejbi bi mogl bit to v modelu?
 
 def poglej_recept():
     print("Izberi recept, ki ga želiš pogledati.")
-    izbran_recept = izberi(model.knjiznica)    
+    recepti = model.knjiznica
+    izbran_recept = izberi(recepti)    
     (ime, velikost, sestavine, postopek) = izbran_recept()
 
     print("Ime: {ime}")
@@ -127,20 +106,45 @@ def poglej_recept():
     print("Postopek: {postopek}")
 
 
+def uredi_recept():
+    print("Kateri recept želiš urediti?")
+    moznosti1 = model.knjiznica
+    recept = izberi(moznosti1)
+
+    print("Kaj želiš urediti?")
+    moznosti = [
+        ("ime", uredi_ime),
+        ("velikost", uredi_velikost),
+        ("sestavine", uredi_sestavine),
+        ("postopek", uredi_postopek)
+    ]
+    izbira = izberi(moznosti)
+    izbira(recept)
+
+def uredi_ime():
+    #tuki bi moglo napisat ime od prej aka da vids kaj je originalno.
+    ime = input('Novo ime> ')
+
+#uredi velikost, sestavine in postopek.
+#Najprej preveri če ime sploh dela...
+
+
+def izbrisi_recept():
+    pass
 
 
 def dodaj_element():
     ime = input('Ime elementa> ')
     kolicina = input('Količina> ')
     enota = input('Enota> ')
-    model.listek.dodaj_element(ime, kolicina, enota)
+    model.listek.append((ime, kolicina, enota))
 
 
 def izbrisi_listek():
     if (
         input(f"Ali si prepričan, da želiš izbrisati listek? [da/ne]") == "da"
     ):
-        model.izbrisi_listek(model.listek)
+        model.izbrisi_listek()
         print("Listek je bil uspešno izbrisan.")
     else:
         print("Brisanje je bilo preklicano, listek ostaja nespremenjen.")
