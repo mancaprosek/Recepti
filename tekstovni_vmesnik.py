@@ -91,25 +91,35 @@ def napisi_recept():
     postopek = input('Postopek> ')
     model.knjiznica.append((ime, velikost, sestavine, postopek))
 
-#Pri poglej in uredi napiše, da je pričakoval 2 values,
-#ampak da jih je too many.. ne štekam? Mejbi bi mogl bit to v modelu?
+
 
 def poglej_recept():
-    print("Izberi recept, ki ga želiš pogledati.")
-    recepti = model.knjiznica
-    izbran_recept = izberi(recepti)    
-    (ime, velikost, sestavine, postopek) = izbran_recept()
+    recepti = []
+    for recept in model.knjiznica:
+        recepti.append((recept[0], recept))
+        print(recept[0])
 
-    print("Ime: {ime}")
-    print("Velikost: {velikost}")
-    print("Sestavine: {sestavine}")
-    print("Postopek: {postopek}")
+    print("Izberi recept, ki ga želiš pogledati.")
+    izbran_recept = izberi(recepti)
+
+    print(f"Ime: {izbran_recept[0]}")
+    print(f"Velikost: {izbran_recept[1]}")
+    print(f"Sestavine: {izbran_recept[2]}")
+    print(f"Postopek: {izbran_recept[3]}")
 
 
 def uredi_recept():
+    recepti = []
+    indeksi = {}
+    indeks = 0
+    for recept in model.knjiznica:
+        recepti.append((recept[0], recept))
+        indeksi[recept] = indeks
+        indeks += 1
+        print(recept[0])
+
     print("Kateri recept želiš urediti?")
-    moznosti1 = model.knjiznica
-    recept = izberi(moznosti1)
+    izbran_recept = izberi(recepti)
 
     print("Kaj želiš urediti?")
     moznosti = [
@@ -119,14 +129,32 @@ def uredi_recept():
         ("postopek", uredi_postopek)
     ]
     izbira = izberi(moznosti)
-    izbira(recept)
+    izbira(izbran_recept)
 
-def uredi_ime():
-    #tuki bi moglo napisat ime od prej aka da vids kaj je originalno.
+    #tuki si moram nekako zrihtat sharanjevanje v model...
+
+
+def uredi_ime(recept):
+    print(recept[0])
     ime = input('Novo ime> ')
+    recept = (ime, recept[1], recept[2], recept[3])
 
-#uredi velikost, sestavine in postopek.
-#Najprej preveri če ime sploh dela...
+def uredi_velikost(recept):
+    print(recept[1])
+    velikost = input('Nova velikost> ')
+    recept = (recept[0], velikost, recept[2], recept[3])
+
+def uredi_sestavine(recept):
+    print(recept[2])
+    sestavine = input('Nove sestavine> ')
+    recept = (recept[0], recept[1], sestavine, recept[3])
+
+def uredi_postopek(recept):
+    print(recept[3])
+    postopek = input('Nov postopek> ')
+    recept = (recept[0], recept[1], recept[2], postopek)
+
+
 
 
 def izbrisi_recept():
