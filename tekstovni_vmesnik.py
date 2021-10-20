@@ -146,13 +146,16 @@ def poglej_recept():
         recepti.append((recept[0], recept))
         print(recept[0])
 
-    print("Izberi recept, ki ga želiš pogledati.")
-    izbran_recept = izberi(recepti)
+    if recepti == []:
+        print("Knjižnica receptov je prazna.")
+    else:
+        print("Izberi recept, ki ga želiš pogledati.")
+        izbran_recept = izberi(recepti)
 
-    print(f"Ime: {izbran_recept[0]}")
-    print(f"Velikost: {izbran_recept[1]}")
-    print(f"Sestavine: {izbran_recept[2]}")
-    print(f"Postopek: {izbran_recept[3]}")
+        print(f"Ime: {izbran_recept[0]}")
+        print(f"Velikost: {izbran_recept[1]}")
+        print(f"Sestavine: {izbran_recept[2]}")
+        print(f"Postopek: {izbran_recept[3]}")
 
 
 def uredi_recept():
@@ -165,18 +168,21 @@ def uredi_recept():
         indeks += 1
         print(recept[0])
 
-    print("Kateri recept želiš urediti?")
-    izbran_recept = izberi(recepti)
+    if recepti == []:
+        print("Knjižnica receptov je prazna.")
+    else:
+        print("Kateri recept želiš urediti?")
+        izbran_recept = izberi(recepti)
 
-    print("Kaj želiš urediti?")
-    moznosti = [
-        ("ime", uredi_ime1),
-        ("velikost", uredi_velikost1),
-        ("sestavine", uredi_sestavine1),
-        ("postopek", uredi_postopek1)
-    ]
-    izbira = izberi(moznosti)
-    izbira(izbran_recept)
+        print("Kaj želiš urediti?")
+        moznosti = [
+            ("ime", uredi_ime1),
+            ("velikost", uredi_velikost1),
+            ("sestavine", uredi_sestavine1),
+            ("postopek", uredi_postopek1)
+        ]
+        izbira = izberi(moznosti)
+        izbira(izbran_recept)
 
     #tuki si moram nekako zrihtat sharanjevanje v model...
 
@@ -190,18 +196,22 @@ def izbrisi_recept():
         indeksi[recept] = indeks
         indeks += 1
         print(recept[0])
-    
-    print("Kateri recept želiš izbrisati?")
-    izbran_recept = izberi(recepti)
-    i = indeksi[recept]
 
-    if (
-        input(f"Ali si prepričan, da želiš izbrisati recept {izbran_recept[0]}? [da/ne]") == "da"
-    ):
-        model.izbrisi_recept(i)
-        print(f"Recept {izbran_recept[0]} je bil uspešno izbrisan.")
+    if recepti == []:
+        print("Knjižnica receptov je prazna.")
+
     else:
-        print("Brisanje je bilo preklicano, recept ostaja shranjen.")
+        print("Kateri recept želiš izbrisati?")
+        izbran_recept = izberi(recepti)
+        i = indeksi[recept]
+
+        if (
+            input(f"Ali si prepričan, da želiš izbrisati recept {izbran_recept[0]}? [da/ne]") == "da"
+        ):
+            model.izbrisi_recept(i)
+            print(f"Recept {izbran_recept[0]} je bil uspešno izbrisan.")
+        else:
+            print("Brisanje je bilo preklicano, recept ostaja shranjen.")
 
 
 
@@ -240,17 +250,20 @@ def uredi_element():
         indeks += 1
         print(element[0])
 
-    print("Kateri element želiš urediti?")
-    izbran_element = izberi(elementi)
+    if elementi == []:
+        print("Na listku ni nobenih elementov.")
+    else:
+        print("Kateri element želiš urediti?")
+        izbran_element = izberi(elementi)
 
-    print("Kaj želiš urediti?")
-    moznosti = [
-        ("ime", uredi_ime2),
-        ("velikost", uredi_velikost2),
-        ("enota", uredi_enoto2)
-    ]
-    izbira = izberi(moznosti)
-    izbira(izbran_element)
+        print("Kaj želiš urediti?")
+        moznosti = [
+            ("ime", uredi_ime2),
+            ("velikost", uredi_velikost2),
+            ("enota", uredi_enoto2)
+        ]
+        izbira = izberi(moznosti)
+        izbira(izbran_element)
 
 # tuki se isto kot pri receptih ne shranjuje.. REŠIII
 
@@ -266,17 +279,20 @@ def izbrisi_element():
         indeks += 1
         print(element[0])
     
-    print("Kateri element želiš izbrisati?")
-    izbran_element = izberi(elementi)
-    i = indeksi[element]
-
-    if (
-        input(f"Ali si prepričan, da želiš izbrisati element {izbran_element[0]}? [da/ne]") == "da"
-    ):
-        model.izbrisi_element(i)
-        print(f"Element {izbran_element[0]} je bil uspešno izbrisan.")
+    if elementi == []:
+        print("Na listku ni nobenih elementov.")
     else:
-        print(f"Brisanje je bilo preklicano, element {izbran_element[0]} ostaja shranjen.")
+        print("Kateri element želiš izbrisati?")
+        izbran_element = izberi(elementi)
+        i = indeksi[element]
+
+        if (
+            input(f"Ali si prepričan, da želiš izbrisati element {izbran_element[0]}? [da/ne]") == "da"
+        ):
+            model.izbrisi_element(i)
+            print(f"Element {izbran_element[0]} je bil uspešno izbrisan.")
+        else:
+            print(f"Brisanje je bilo preklicano, element {izbran_element[0]} ostaja shranjen.")
 
 
 def izbrisi_listek():
