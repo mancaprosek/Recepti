@@ -54,6 +54,7 @@ def tekstovni_vmesnik():
                 ("urediti recept", uredi_recept),
                 ("izbrisati recept", izbrisi_recept),
                 ("dodati element", dodaj_element),
+                ("izbrisati element", izbrisi_element),
                 ("izbrisati listek", izbrisi_listek)
             ]
             izbira = izberi(moznosti)
@@ -156,9 +157,28 @@ def uredi_postopek(recept):
 
 
 
-
 def izbrisi_recept():
-    pass
+    recepti = []
+    indeksi = {}
+    indeks = 0
+    for recept in model.knjiznica:
+        recepti.append((recept[0], recept))
+        indeksi[recept] = indeks
+        indeks += 1
+        print(recept[0])
+    
+    print("Kateri recept želiš izbrisati?")
+    izbran_recept = izberi(recepti)
+    i = indeksi[recept]
+
+    if (
+        input(f"Ali si prepričan, da želiš izbrisati recept {izbran_recept[0]}? [da/ne]") == "da"
+    ):
+        model.izbrisi_recept(i)
+        print(f"Recept {izbran_recept[0]} je bil uspešno izbrisan.")
+    else:
+        print("Brisanje je bilo preklicano, recept ostaja shranjen.")
+
 
 
 def dodaj_element():
@@ -166,6 +186,10 @@ def dodaj_element():
     kolicina = input('Količina> ')
     enota = input('Enota> ')
     model.listek.append((ime, kolicina, enota))
+
+
+def izbrisi_element():
+    pass
 
 
 def izbrisi_listek():
