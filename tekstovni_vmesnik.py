@@ -32,7 +32,7 @@ def izberi(seznam):
             _, element = seznam[izbira - 1]
             return element
         else:
-            print(f"Izberi število med 1 in {len(seznam)}")
+            print(f"Izberi število med 1 in {len(seznam)}.")
 
 
 ############################################################
@@ -74,7 +74,7 @@ def uredi_velikost2(element):
     element = (element[0], velikost, element[2])
 
 def uredi_enoto2(element):
-    print(element[0])
+    print(element[2])
     enota = input('Nova enota> ')
     element = (element[0], element[1], enota)
 
