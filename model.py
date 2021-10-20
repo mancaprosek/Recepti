@@ -16,7 +16,6 @@ class Model:
 
     def izbrisi_recept(self, indeks):
         self.knjiznica.pop(indeks)
-    #od kje dobimo ta indeks?
 
     def dodaj_element(self, ime, kolicina, enota):
         element = Element(self, ime, kolicina, enota)

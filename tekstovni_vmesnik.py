@@ -36,6 +36,50 @@ def izberi(seznam):
 
 
 ############################################################
+# Pomožne funkcije za urejanje
+############################################################
+
+
+def uredi_ime1(recept):
+    print(recept[0])
+    ime = input('Novo ime> ')
+    recept = (ime, recept[1], recept[2], recept[3])
+
+def uredi_velikost1(recept):
+    print(recept[1])
+    velikost = input('Nova velikost> ')
+    recept = (recept[0], velikost, recept[2], recept[3])
+
+def uredi_sestavine1(recept):
+    print(recept[2])
+    sestavine = input('Nove sestavine> ')
+    recept = (recept[0], recept[1], sestavine, recept[3])
+
+def uredi_postopek1(recept):
+    print(recept[3])
+    postopek = input('Nov postopek> ')
+    recept = (recept[0], recept[1], recept[2], postopek)
+
+#Narejene so funkcije za urejanje, ki jih je samo veliko.
+#A bi to morala združit, kako bi to združila?
+
+def uredi_ime2(element):
+    print(element[0])
+    ime = input('Novo ime> ')
+    element = (ime, element[1], element[2])
+
+def uredi_velikost2(element):
+    print(element[1])
+    velikost = input('Nova velikost> ')
+    element = (element[0], velikost, element[2])
+
+def uredi_enoto2(element):
+    print(element[0])
+    enota = input('Nova enota> ')
+    element = (element[0], element[1], enota)
+
+
+############################################################
 # tekstovni vmesnik
 ############################################################
 
@@ -54,6 +98,8 @@ def tekstovni_vmesnik():
                 ("urediti recept", uredi_recept),
                 ("izbrisati recept", izbrisi_recept),
                 ("dodati element", dodaj_element),
+                ("pogledati element", poglej_element),
+                ("urediti element", uredi_element),
                 ("izbrisati element", izbrisi_element),
                 ("izbrisati listek", izbrisi_listek)
             ]
@@ -85,13 +131,13 @@ def pokazi_listek():
         print(ime)
 
 
+
 def napisi_recept():
     ime = input('Ime recepta> ')
     velikost = input('Velikost> ')
     sestavine = input('Sestavine> ')
     postopek = input('Postopek> ')
     model.knjiznica.append((ime, velikost, sestavine, postopek))
-
 
 
 def poglej_recept():
@@ -124,37 +170,15 @@ def uredi_recept():
 
     print("Kaj želiš urediti?")
     moznosti = [
-        ("ime", uredi_ime),
-        ("velikost", uredi_velikost),
-        ("sestavine", uredi_sestavine),
-        ("postopek", uredi_postopek)
+        ("ime", uredi_ime1),
+        ("velikost", uredi_velikost1),
+        ("sestavine", uredi_sestavine1),
+        ("postopek", uredi_postopek1)
     ]
     izbira = izberi(moznosti)
     izbira(izbran_recept)
 
     #tuki si moram nekako zrihtat sharanjevanje v model...
-
-
-def uredi_ime(recept):
-    print(recept[0])
-    ime = input('Novo ime> ')
-    recept = (ime, recept[1], recept[2], recept[3])
-
-def uredi_velikost(recept):
-    print(recept[1])
-    velikost = input('Nova velikost> ')
-    recept = (recept[0], velikost, recept[2], recept[3])
-
-def uredi_sestavine(recept):
-    print(recept[2])
-    sestavine = input('Nove sestavine> ')
-    recept = (recept[0], recept[1], sestavine, recept[3])
-
-def uredi_postopek(recept):
-    print(recept[3])
-    postopek = input('Nov postopek> ')
-    recept = (recept[0], recept[1], recept[2], postopek)
-
 
 
 def izbrisi_recept():
@@ -181,6 +205,7 @@ def izbrisi_recept():
 
 
 
+
 def dodaj_element():
     ime = input('Ime elementa> ')
     kolicina = input('Količina> ')
@@ -188,8 +213,70 @@ def dodaj_element():
     model.listek.append((ime, kolicina, enota))
 
 
+def poglej_element():
+    elementi = []
+    for element in model.listek:
+        elementi.append((element[0], element))
+        print(element[0])
+
+    if elementi == []:
+        print("Na listku ni nobenih elementov.")
+    else:
+        print("Izberi element, ki ga želiš pogledati.")
+        izbran_element = izberi(elementi)
+
+        print(f"Ime: {izbran_element[0]}")
+        print(f"Velikost: {izbran_element[1]}")
+        print(f"Enote: {izbran_element[2]}")
+
+
+def uredi_element():
+    elementi = []
+    indeksi = {}
+    indeks = 0
+    for element in model.listek:
+        elementi.append((element[0], element))
+        indeksi[element] = indeks
+        indeks += 1
+        print(element[0])
+
+    print("Kateri element želiš urediti?")
+    izbran_element = izberi(elementi)
+
+    print("Kaj želiš urediti?")
+    moznosti = [
+        ("ime", uredi_ime2),
+        ("velikost", uredi_velikost2),
+        ("enota", uredi_enoto2)
+    ]
+    izbira = izberi(moznosti)
+    izbira(izbran_element)
+
+# tuki se isto kot pri receptih ne shranjuje.. REŠIII
+
+
+
 def izbrisi_element():
-    pass
+    elementi = []
+    indeksi = {}
+    indeks = 0
+    for element in model.listek:
+        elementi.append((element[0], element))
+        indeksi[element] = indeks
+        indeks += 1
+        print(element[0])
+    
+    print("Kateri element želiš izbrisati?")
+    izbran_element = izberi(elementi)
+    i = indeksi[element]
+
+    if (
+        input(f"Ali si prepričan, da želiš izbrisati element {izbran_element[0]}? [da/ne]") == "da"
+    ):
+        model.izbrisi_element(i)
+        print(f"Element {izbran_element[0]} je bil uspešno izbrisan.")
+    else:
+        print(f"Brisanje je bilo preklicano, element {izbran_element[0]} ostaja shranjen.")
 
 
 def izbrisi_listek():
