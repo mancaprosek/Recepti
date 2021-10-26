@@ -35,6 +35,25 @@ def izberi(seznam):
             print(f"Izberi število med 1 in {len(seznam)}.")
 
 
+def tvori_seznam(seznam):
+    recepti = []
+    indeksi = {}
+    indeks = 0
+    for recept in seznam:
+        recepti.append((recept[0], recept))
+        indeksi[recept] = indeks
+        indeks += 1
+        print(recept[0])
+    return recepti
+
+def pridobi_indeks(sez):
+    ind = {}
+    indeks = 0
+    for x in sez:
+        ind[x] = indeks
+        indeks += 1
+        return ind
+
 ############################################################
 # Pomožne funkcije za urejanje
 ############################################################
@@ -43,22 +62,23 @@ def izberi(seznam):
 def uredi_ime1(recept):
     print(recept[0])
     ime = input('Novo ime> ')
-    recept = (ime, recept[1], recept[2], recept[3])
+    return ime, recept[1], recept[2], recept[3]
 
 def uredi_velikost1(recept):
     print(recept[1])
     velikost = input('Nova velikost> ')
-    recept = (recept[0], velikost, recept[2], recept[3])
+    return (recept[0], velikost, recept[2], recept[3])
 
 def uredi_sestavine1(recept):
     print(recept[2])
     sestavine = input('Nove sestavine> ')
-    recept = (recept[0], recept[1], sestavine, recept[3])
+    return (recept[0], recept[1], sestavine, recept[3])
+    
 
 def uredi_postopek1(recept):
     print(recept[3])
     postopek = input('Nov postopek> ')
-    recept = (recept[0], recept[1], recept[2], postopek)
+    return (recept[0], recept[1], recept[2], postopek)
 
 #Narejene so funkcije za urejanje, ki jih je samo veliko.
 #A bi to morala združit, kako bi to združila?
@@ -66,17 +86,17 @@ def uredi_postopek1(recept):
 def uredi_ime2(element):
     print(element[0])
     ime = input('Novo ime> ')
-    element = (ime, element[1], element[2])
+    return (ime, element[1], element[2])
 
 def uredi_velikost2(element):
     print(element[1])
     velikost = input('Nova velikost> ')
-    element = (element[0], velikost, element[2])
+    return (element[0], velikost, element[2])
 
 def uredi_enoto2(element):
     print(element[2])
     enota = input('Nova enota> ')
-    element = (element[0], element[1], enota)
+    return (element[0], element[1], enota)
 
 
 ############################################################
@@ -131,20 +151,16 @@ def pokazi_listek():
         print(ime)
 
 
-
 def napisi_recept():
     ime = input('Ime recepta> ')
     velikost = input('Velikost> ')
     sestavine = input('Sestavine> ')
     postopek = input('Postopek> ')
-    model.knjiznica.append((ime, velikost, sestavine, postopek))
+    model.napisi_recept(ime, velikost, sestavine, postopek)
 
 
 def poglej_recept():
-    recepti = []
-    for recept in model.knjiznica:
-        recepti.append((recept[0], recept))
-        print(recept[0])
+    recepti = tvori_seznam(model.knjiznica)
 
     if recepti == []:
         print("Knjižnica receptov je prazna.")
@@ -159,14 +175,8 @@ def poglej_recept():
 
 
 def uredi_recept():
-    recepti = []
-    indeksi = {}
-    indeks = 0
-    for recept in model.knjiznica:
-        recepti.append((recept[0], recept))
-        indeksi[recept] = indeks
-        indeks += 1
-        print(recept[0])
+    recepti = tvori_seznam(model.knjiznica)
+    indeksi = pridobi_indeks(model.knjiznica)
 
     if recepti == []:
         print("Knjižnica receptov je prazna.")
@@ -182,20 +192,15 @@ def uredi_recept():
             ("postopek", uredi_postopek1)
         ]
         izbira = izberi(moznosti)
-        izbira(izbran_recept)
+        ime, velikost, sestavine, postopek = izbira(izbran_recept)
 
-    #tuki si moram nekako zrihtat sharanjevanje v model...
+        model.izbrisi_recept(indeksi[izbran_recept])
+        model.napisi_recept(ime, velikost, sestavine, postopek)
 
 
 def izbrisi_recept():
-    recepti = []
-    indeksi = {}
-    indeks = 0
-    for recept in model.knjiznica:
-        recepti.append((recept[0], recept))
-        indeksi[recept] = indeks
-        indeks += 1
-        print(recept[0])
+    recepti = tvori_seznam(model.knjiznica)
+    indeksi = pridobi_indeks(model.knjiznica)
 
     if recepti == []:
         print("Knjižnica receptov je prazna.")
@@ -203,7 +208,7 @@ def izbrisi_recept():
     else:
         print("Kateri recept želiš izbrisati?")
         izbran_recept = izberi(recepti)
-        i = indeksi[recept]
+        i = indeksi[izbran_recept]
 
         if (
             input(f"Ali si prepričan, da želiš izbrisati recept {izbran_recept[0]}? [da/ne]") == "da"
@@ -224,10 +229,7 @@ def dodaj_element():
 
 
 def poglej_element():
-    elementi = []
-    for element in model.listek:
-        elementi.append((element[0], element))
-        print(element[0])
+    elementi = tvori_seznam(model.listek)
 
     if elementi == []:
         print("Na listku ni nobenih elementov.")
@@ -241,14 +243,8 @@ def poglej_element():
 
 
 def uredi_element():
-    elementi = []
-    indeksi = {}
-    indeks = 0
-    for element in model.listek:
-        elementi.append((element[0], element))
-        indeksi[element] = indeks
-        indeks += 1
-        print(element[0])
+    elementi = tvori_seznam(model.listek)
+    indeksi = pridobi_indeks(model.listek)
 
     if elementi == []:
         print("Na listku ni nobenih elementov.")
@@ -263,28 +259,22 @@ def uredi_element():
             ("enota", uredi_enoto2)
         ]
         izbira = izberi(moznosti)
-        izbira(izbran_element)
+        ime, velikost, enota = izbira(izbran_element)
 
-# tuki se isto kot pri receptih ne shranjuje.. REŠIII
-
+        model.izbrisi_element(indeksi[izbran_element])
+        model.dodaj_element(ime, velikost, enota)
 
 
 def izbrisi_element():
-    elementi = []
-    indeksi = {}
-    indeks = 0
-    for element in model.listek:
-        elementi.append((element[0], element))
-        indeksi[element] = indeks
-        indeks += 1
-        print(element[0])
+    elementi = tvori_seznam(model.listek)
+    indeksi = pridobi_indeks(model.listek)
     
     if elementi == []:
         print("Na listku ni nobenih elementov.")
     else:
         print("Kateri element želiš izbrisati?")
         izbran_element = izberi(elementi)
-        i = indeksi[element]
+        i = indeksi[izbran_element]
 
         if (
             input(f"Ali si prepričan, da želiš izbrisati element {izbran_element[0]}? [da/ne]") == "da"
