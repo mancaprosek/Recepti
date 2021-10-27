@@ -85,14 +85,14 @@ class Recept:
     def __init__(self, ime, velikost, sestavine, postopek):
         self.ime = ime
         self.velikost = velikost
-        self.sestavine = []
+        self.sestavine = {}
         self.postopek = postopek
     
     def dodaj_sestavino(self, ime, kolicina):
         sestavina = Sestavina(ime, kolicina)
-        self.sestavine.append(sestavina)
+        self.sestavine[ime] = kolicina
     #druga vrstica potrebna?
-    
+
 
     def v_slovar(self):
         return {

@@ -1,4 +1,4 @@
-from model import Model
+from model import Model, Recept, Sestavina
 
 model = Model()
 
@@ -127,7 +127,7 @@ def tekstovni_vmesnik():
             print(30 * "-")
             izbira()
             print()
-            #model.shrani(IME_DATOTEKE)
+            #Model.shrani(IME_DATOTEKE)
 
         except ValueError as e:
             print(e.args[0])
@@ -140,25 +140,25 @@ def tekstovni_vmesnik():
 
 
 def pokazi_recepte():
-    for (ime, velikost, sestavine, postopek) in model.knjiznica:
+    for (ime, velikost, sestavine, postopek) in Model.knjiznica:
         print(ime)
 
 
 def pokazi_listek():
-    for (ime, kolicina, enota) in model.listek:
+    for (ime, kolicina, enota) in Model.listek:
         print(ime)
 
 
 def napisi_recept():
     ime = input('Ime recepta> ')
     velikost = input('Velikost> ')
-    sestavine = input('Sestavine> ')
+    sestavine = {}
     postopek = input('Postopek> ')
-    model.napisi_recept(ime, velikost, sestavine, postopek)
+    Model.napisi_recept(ime, velikost, sestavine, postopek)
 
 
 def poglej_recept():
-    recepti = tvori_seznam(model.knjiznica)
+    recepti = tvori_seznam(Model.knjiznica)
 
     if recepti == []:
         print("Knjižnica receptov je prazna.")
@@ -173,8 +173,8 @@ def poglej_recept():
 
 
 def uredi_recept():
-    recepti = tvori_seznam(model.knjiznica)
-    indeksi = pridobi_indeks(model.knjiznica)
+    recepti = tvori_seznam(Model.knjiznica)
+    indeksi = pridobi_indeks(Model.knjiznica)
 
     if recepti == []:
         print("Knjižnica receptov je prazna.")
@@ -192,13 +192,19 @@ def uredi_recept():
         izbira = izberi(moznosti)
         ime, velikost, sestavine, postopek = izbira(izbran_recept)
 
-        model.izbrisi_recept(indeksi[izbran_recept])
-        model.napisi_recept(ime, velikost, sestavine, postopek)
+        Model.izbrisi_recept(indeksi[izbran_recept])
+        Model.napisi_recept(ime, velikost, sestavine, postopek)
+
+
+def dodaj_sestavino(recept):
+    ime = input('Ime sestavine> ')
+    kolicina = input('Količina> ')
+    Recept.dodaj_sestavino[ime] = kolicina
 
 
 def izbrisi_recept():
-    recepti = tvori_seznam(model.knjiznica)
-    indeksi = pridobi_indeks(model.knjiznica)
+    recepti = tvori_seznam(Model.knjiznica)
+    indeksi = pridobi_indeks(Model.knjiznica)
 
     if recepti == []:
         print("Knjižnica receptov je prazna.")
@@ -211,7 +217,7 @@ def izbrisi_recept():
         if (
             input(f"Ali si prepričan, da želiš izbrisati recept {izbran_recept[0]}? [da/ne]") == "da"
         ):
-            model.izbrisi_recept(i)
+            Model.izbrisi_recept(i)
             print(f"Recept {izbran_recept[0]} je bil uspešno izbrisan.")
         else:
             print("Brisanje je bilo preklicano, recept ostaja shranjen.")
@@ -223,11 +229,11 @@ def dodaj_element():
     ime = input('Ime elementa> ')
     kolicina = input('Količina> ')
     enota = input('Enota> ')
-    model.listek.append((ime, kolicina, enota))
+    Model.listek.append((ime, kolicina, enota))
 
 
 def poglej_element():
-    elementi = tvori_seznam(model.listek)
+    elementi = tvori_seznam(Model.listek)
 
     if elementi == []:
         print("Na listku ni nobenih elementov.")
@@ -241,8 +247,8 @@ def poglej_element():
 
 
 def uredi_element():
-    elementi = tvori_seznam(model.listek)
-    indeksi = pridobi_indeks(model.listek)
+    elementi = tvori_seznam(Model.listek)
+    indeksi = pridobi_indeks(Model.listek)
 
     if elementi == []:
         print("Na listku ni nobenih elementov.")
@@ -259,13 +265,13 @@ def uredi_element():
         izbira = izberi(moznosti)
         ime, velikost, enota = izbira(izbran_element)
 
-        model.izbrisi_element(indeksi[izbran_element])
-        model.dodaj_element(ime, velikost, enota)
+        Model.izbrisi_element(indeksi[izbran_element])
+        Model.dodaj_element(ime, velikost, enota)
 
 
 def izbrisi_element():
-    elementi = tvori_seznam(model.listek)
-    indeksi = pridobi_indeks(model.listek)
+    elementi = tvori_seznam(Model.listek)
+    indeksi = pridobi_indeks(Model.listek)
     
     if elementi == []:
         print("Na listku ni nobenih elementov.")
@@ -277,7 +283,7 @@ def izbrisi_element():
         if (
             input(f"Ali si prepričan, da želiš izbrisati element {izbran_element[0]}? [da/ne]") == "da"
         ):
-            model.izbrisi_element(i)
+            Model.izbrisi_element(i)
             print(f"Element {izbran_element[0]} je bil uspešno izbrisan.")
         else:
             print(f"Brisanje je bilo preklicano, element {izbran_element[0]} ostaja shranjen.")
@@ -287,7 +293,7 @@ def izbrisi_listek():
     if (
         input(f"Ali si prepričan, da želiš izbrisati listek? [da/ne]") == "da"
     ):
-        model.izbrisi_listek()
+        Model.izbrisi_listek()
         print("Listek je bil uspešno izbrisan.")
     else:
         print("Brisanje je bilo preklicano, listek ostaja nespremenjen.")
