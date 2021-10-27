@@ -127,8 +127,7 @@ def tekstovni_vmesnik():
             print(30 * "-")
             izbira()
             print()
-            #model.shrani_recepte(IME_DATOTEKE)
-            #model.shrani_elemente(IME_DATOTEKE)
+            model.shrani(IME_DATOTEKE)
 
         except ValueError as e:
             print(e.args[0])

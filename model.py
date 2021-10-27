@@ -1,6 +1,3 @@
-
-#A ni tko da se nesmem na tekstovni vmesnik sklicevat?
-
 import json
 
 class Model:
@@ -10,17 +7,17 @@ class Model:
 
 
     def napisi_recept(self, ime, velikost,  sestavine, postopek):
-        recept = Recept(ime, velikost, sestavine, postopek)
+        recept = (ime, velikost, sestavine, postopek)
         self.knjiznica.append(recept)
-    #A rabim tkole napisat to drugo vrstico        
+
+    #skenslalal sem tist Recept, ker ga ne zna klicat potem..
 
     def izbrisi_recept(self, indeks):
         self.knjiznica.pop(indeks)
 
     def dodaj_element(self, ime, kolicina, enota):
-        element = Element(self, ime, kolicina, enota)
+        element = (ime, kolicina, enota)
         self.listek.append(element)
-    #Isto kot 15.. a je druga vrstica potrebna
     
     def izbrisi_element(self, indeks):
         self.listek.pop(indeks)
@@ -28,24 +25,28 @@ class Model:
     def izbrisi_listek(self):
         self.listek.clear()
 
-    
 
-    #Tale cela zadeva z zapisovanjem je za popravit
-    #ker imamo samo eno json datoteko
-    #Kako to narediš, da združiš...?
+    #Tale cela zadeva z zapisovanjem pojma nimam, če je uredu.
 
-    def recepte_v_slovar(self):
+    def v_slovar(self):
         return {
-            'ime': self.knjiznica,
-            'recepti': [Recept.v_slovar() for recept in self.knjiznica]
+            "recepti" : [
+                {
+                    'ime': self.knjiznica
+                },
+                {
+                'recepti': [Recept.v_slovar() for recept in self.knjiznica]
         }
-    
-    def elemente_v_slovar(self):
-        return {
-            'ime': self.listek ,
-            'elementi': [Element.v_slovar() for element in self.listek]
+            ],
+            "listek" : [
+                {
+                    'ime': self.listek
+                },
+                {
+                    'elementi': [Element.v_slovar() for element in self.listek]
+                }
+            ]
         }
-    
 
     @staticmethod
     def recepte_iz_slovarja(slovar_receptov):
@@ -57,18 +58,14 @@ class Model:
     def elemente_iz_slovarja(slovar_elementov):
         listek = Model(slovar_elementov['ime'])
         listek.element = [Element.iz_slovarja(listek, element) for element in slovar_elementov['elementi']]
+        return listek
 
 
-
-    def shrani_recepte(self, ime_datoteke):
+    def shrani(self, ime_datoteke):
         with open(ime_datoteke, 'w') as dat:
-            slovar_receptov = self.recepte_v_slovar
-            json.dump(slovar_receptov, dat)
-    
-    def shrani_elemente(self, ime_datoteke):
-        with open(ime_datoteke, 'w') as dat:
-            slovar_elementov = self.elemente_v_slovar
-            json.dump(slovar_elementov, dat)
+            slovar = self.v_slovar
+            json.dump(slovar, dat)
+
 
     @staticmethod
     def nalozi_recepte(ime_datoteke):
@@ -127,7 +124,7 @@ class Sestavina:
         self.enota = enota
 
     #a so enote potrebne, pomojem se da to lepš nardit
-
+    #tega do zdaj zares še nisem uporabila.. Kakšen smisel ima???
     #moram tukaj kaj posebaj še dati za spreminjanje? a sploh rabim te razrede?
 
 
@@ -136,8 +133,7 @@ class Element:
         self.ime = ime
         self.kolicina = kolicina
         self.enota = enota
-    
-    #enote res rabimo??
+
 
     def v_slovar(self):
         return {
