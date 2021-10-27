@@ -7,10 +7,10 @@ class Model:
 
 
     def napisi_recept(self, ime, velikost,  sestavine, postopek):
-        recept = (ime, velikost, sestavine, postopek)
+        recept = Recept(ime, velikost, sestavine, postopek)
         self.knjiznica.append(recept)
-
-    #skenslalal sem tist Recept, ker ga ne zna klicat potem..
+    
+    #kaj je s tem RECeptoooom..
 
     def izbrisi_recept(self, indeks):
         self.knjiznica.pop(indeks)
@@ -88,8 +88,8 @@ class Recept:
         self.sestavine = []
         self.postopek = postopek
     
-    def dodaj_sestavino(self, ime, kolicina, enota):
-        sestavina = Sestavina(ime, kolicina, enota)
+    def dodaj_sestavino(self, ime, kolicina):
+        sestavina = Sestavina(ime, kolicina)
         self.sestavine.append(sestavina)
     #druga vrstica potrebna?
     
@@ -118,12 +118,10 @@ class Recept:
 
 
 class Sestavina:
-    def __init__(self, ime, kolicina, enota):
+    def __init__(self, ime, kolicina):
         self.ime = ime
         self.kolicina = kolicina
-        self.enota = enota
 
-    #a so enote potrebne, pomojem se da to lepš nardit
     #tega do zdaj zares še nisem uporabila.. Kakšen smisel ima???
     #moram tukaj kaj posebaj še dati za spreminjanje? a sploh rabim te razrede?
 
