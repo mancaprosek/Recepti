@@ -1,6 +1,7 @@
 from model import Model, Recept, Sestavina
 
 model = Model()
+recept = Recept()
 
 IME_DATOTEKE = 'stanje.json'
 
@@ -152,9 +153,9 @@ def pokazi_listek():
 def napisi_recept():
     ime = input('Ime recepta> ')
     velikost = input('Velikost> ')
-    sestavine = {}
+    sestavine = input('Sestavine> ')
     postopek = input('Postopek> ')
-    Model.napisi_recept(ime, velikost, sestavine, postopek)
+    model.napisi_recept(ime, velikost, sestavine, postopek)
 
 
 def poglej_recept():
