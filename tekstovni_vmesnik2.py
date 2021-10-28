@@ -1,7 +1,7 @@
 from model2 import Model, Recept, Sestavina
 
 IME_DATOTEKE = 'stanje.json'
-model = Model.nalozi(IME_DATOTEKE)
+model = Model(IME_DATOTEKE)
 
 
 ############################################################
@@ -37,8 +37,8 @@ def izberi(seznam):
 def tvori_seznam(seznam):
     recepti = []
     for recept in seznam:
-        recepti.append((recept[0], recept))
-        print(recept[0])
+        recepti.append((recept.ime, recept))
+        print(recept.ime)
     return recepti
 
 
@@ -49,12 +49,6 @@ def pridobi_indeks(sez):
         ind[x] = indeks
         indeks += 1
         return ind
-
-
-############################################################
-# Pomožne funkcije za urejanje
-############################################################
-
 
 
 ############################################################
@@ -79,8 +73,9 @@ def tekstovni_vmesnik():
             izbira = izberi(moznosti)
             print(30 * "-")
             izbira()
-            print()
-            Model.shrani(IME_DATOTEKE)
+            print("shrani")
+            print(IME_DATOTEKE)
+            model.shrani(IME_DATOTEKE)
 
         except ValueError as e:
             print(e.args[0])
@@ -95,8 +90,9 @@ def tekstovni_vmesnik():
 def prikazi_knjiznico():
     if model.knjiznica != []:
         print('Recepti:')
-        for (ime, velikost, sestavine, postopek) in model.knjiznica:
-            print(ime)
+        
+        for recept in model.knjiznica:
+            print(recept.ime)
         print()
         print(30 * "-")
         
@@ -132,17 +128,15 @@ def poglej_recept():
         print("Izberi recept, ki ga želiš pogledati.")
         izbran_recept = izberi(recepti)
 
-        print(f"Ime: {izbran_recept[0]}")
-        print(f"Velikost: {izbran_recept[1]}")
-        print(f"Sestavine: {izbran_recept[2]}")
-        print(f"Postopek: {izbran_recept[3]}")
+        print(f"Ime: {izbran_recept.ime}")
+        print(f"Velikost: {izbran_recept.velikost}")
+        print(f"Sestavine: {izbran_recept.sestavine}")
+        print(f"Postopek: {izbran_recept.postopek}")
     
 
 def uredi_recept():
     recepti = tvori_seznam(model.knjiznica)
     indeksi = pridobi_indeks(model.knjiznica)
-
-    #tuki se neki pr indeksih zatakne, kao da je unhashable... ne stekam čist..
 
     if recepti == []:
         print("Knjižnica receptov je prazna.")
@@ -186,26 +180,19 @@ def dodaj_sestavine():
             kolicina = vnesi_stevilo('Količina> ')
             enota = input('Enota> ')
             Recept.dodaj_sestavino(izbran_recept, ime, kolicina, enota)
-    
-#TUKI napiše   File "c:\Users\manca\OneDrive\FMF\Recepti\Recepti\model2.py", line 30, in dodaj_sestavino
-#     self.sestavine[ime] = (kolicina, enota)
-# AttributeError: 'tuple' object has no attribute 'sestavine'
-
-#########################################
-##### Funkcije za urejanje receptov #####
+            
 
 def uredi_ime(recept):
-    print(recept[0])
+    print(recept.ime)
     ime = input('Novo ime> ')
-    return ime, recept[1], recept[2], recept[3]
+    return ime, recept.velikost, recept.sestavine, recept.postopek
 
 
 def uredi_velikost(recept):
-    print(recept[1])
-    stara_velikost = recept[1]
+    print(recept.velikost)
+    stara_velikost = recept.velikost
     nova_velikost = vnesi_stevilo("Nova velikost> ")
-    slovar_sestavin = recept[2]
-    #to zaenkrat še ni slovar! ni še zrihtan!!
+    slovar_sestavin = recept.sestavine
 
     i = int(nova_velikost) / int(stara_velikost)
 
@@ -213,30 +200,27 @@ def uredi_velikost(recept):
         stara_kolicina = slovar_sestavin[sestavina]
         slovar_sestavin[sestavina] = int(stara_kolicina) * i
 
-    return recept[0], nova_velikost, slovar_sestavin, recept[3]
+    return recept.ime, nova_velikost, slovar_sestavin, recept.postopek
 
 
 def uredi_sestavine(recept):
-    for ime in recept[2].keys():
+    for ime in recept.sestavine.keys():
         print(ime)
     print('Katero sestavino želiš urediti?')
-    ime = input('Vnesi ime:> ')
-    novo_ime = input('Vnesi novo ime:> ')
-    nova_kolicina = input('Vnesi novo količino:> ')
-    nova_enota = input('Vnesi novo enoto:>')
-    recept[2].pop(ime)
-    recept[2][novo_ime] = (nova_kolicina, nova_enota)
-    return recept[0], recept[1], recept[2], recept[3]
-
-#tuki isto ne dovoli za slovar
+    ime = input('Vnesi ime> ')
+    novo_ime = input('Vnesi novo ime> ')
+    nova_kolicina = input('Vnesi novo količino> ')
+    nova_enota = input('Vnesi novo enoto>')
+    recept.sestavine.pop(ime)
+    recept.sestavine[novo_ime] = (nova_kolicina, nova_enota)
+    return recept.ime, recept.velikost, recept.sestavine, recept.postopek
 
 
 def uredi_postopek(recept):
-    print(recept[3])
+    print(recept.postopek)
     postopek = input('Nov postopek> ')
-    return recept[0], recept[1], recept[2], postopek
+    return recept.ime, recept.velikost, recept.sestavine, postopek
 
-#########################################
 
 
 def izbrisi_recept():
@@ -252,16 +236,13 @@ def izbrisi_recept():
         i = indeksi[izbran_recept]
 
         if (
-            input(f"Ali si prepričan, da želiš izbrisati recept {izbran_recept[0]}? [da/ne]") == "da"
+            input(f"Ali si prepričan, da želiš izbrisati recept {izbran_recept.ime}? [da/ne]") == "da"
         ):
             model.izbrisi_recept(i)
-            print(f"Recept {izbran_recept[0]} je bil uspešno izbrisan.")
+            print(f"Recept {izbran_recept.ime} je bil uspešno izbrisan.")
         else:
             print("Brisanje je bilo preklicano, recept ostaja shranjen.")
 
 
-tekstovni_vmesnik()
 
-#Razredov ne zazna, to z modelom povezan ne štekam
-#pri dodajanju sestavin neki ni zadovoljen
-#dodajanje sestavin je še uganka, da bo lepo slovar
+tekstovni_vmesnik()
