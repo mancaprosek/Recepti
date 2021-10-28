@@ -1,74 +1,63 @@
 import json
+import random
 
 class Model:
-    def __init__(self):
-        self.knjiznica = []
+    def __init__(self, ime_datoteke):
+        self.knjiznica = self.nalozi(ime_datoteke)
 
-    def dodaj_recept(self, ime, velikost,  sestavine, postopek):
-        recept = (ime, velikost, sestavine, postopek)
+    def dodaj_recept(self, ime, velikost, sestavine, postopek):
+        id = random.randint(0, 100000)
+        recept = Recept(id, ime, velikost, sestavine, postopek)
         self.knjiznica.append(recept)
-    #tle zraven ni tega razreda recept
+        return recept
     
     def izbrisi_recept(self, indeks):
         self.knjiznica.pop(indeks)
 
-    def izbrisi_knjiznico(self):
-        self.knjiznica.clear()
+    def izbrisi_recept_id(self, id):
+        ind = 0
+        for idx, recept in enumerate(self.knjiznica):
+            if recept.id == id:
+                ind = idx
+                break
+        self.knjiznica.pop(ind)
+                
     
-    
-    #občutek imam, da tega sploh ne rabim v modelu... Nisem prepričanaaaa
-    # def v_slovar(self):
-    #     return {
-    #         'ime': self.knjiznica,
-    #         'recepti': [Recept.v_slovar() for recept in self.knjiznica]
-    #     }
-
-    # @staticmethod
-    # def iz_slovarja(slovar):
-    #     knjiznica = Model(slovar['ime'])
-    #     return knjiznica
-        #***** v zapiskih
-    #tega dela vmes, da ne rabim... Ker on je dal samo v spisek in opravila....
-
-
     def shrani(self, ime_datoteke):
         with open(ime_datoteke, 'w') as f:
-            slovar = Recept.v_slovar()
-            json.dump(slovar, f)
-    #kjer je recept ima on self..
+            json.dump([ob.__dict__ for ob in self.knjiznica], f)
+
 
     @staticmethod
     def nalozi(ime_datoteke):
         with open(ime_datoteke) as f:
-            slovar = json.load(f)
-            return Recept.iz_slovarja(slovar)
-    #tuki k je recept ima on Model...??
+            data = json.load(f)
+            seznam = []
+            for slovar in data:
+                seznam.append(Recept.iz_slovarja(slovar))
+            print("data")
+            print(data)
+            return seznam
 
 
 class Recept:
-    def __init__(self, ime, velikost, sestavine, postopek):
+    def __init__(self, id,  ime, velikost, sestavine, postopek):
+        self.id = id
         self.ime = ime
         self.velikost = velikost
-        self.sestavine = {}
+        self.sestavine = sestavine
         self.postopek = postopek
-    
+
+
     def dodaj_sestavino(self, ime, kolicina, enota):
-        sestavina = (ime, kolicina, enota)
+        sestavina = Sestavina(ime, kolicina, enota)
         self.sestavine[ime] = (kolicina, enota)
-    #ni razreda sestavina
 
-
-    def v_slovar(self):
-        return {
-            'ime': self.ime,
-            'velikost': self.velikost,
-            'sestavine': self.sestavine,
-            'postopek': self.postopek 
-        }
 
     @staticmethod
     def iz_slovarja(slovar):
         return Recept(
+            slovar['id'],
             slovar['ime'],
             slovar['velikost'],
             slovar['sestavine'],
