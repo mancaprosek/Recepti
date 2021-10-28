@@ -1,6 +1,6 @@
 import bottle
 
-from model2 import Model
+from model import Model
 IME_DATOTEKE = 'stanje.json'
 model = Model(IME_DATOTEKE)
 
