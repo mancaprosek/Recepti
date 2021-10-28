@@ -1,8 +1,7 @@
 from model2 import Model, Recept, Sestavina
 
-model = Model()
-
 IME_DATOTEKE = 'stanje.json'
+model = Model.nalozi(IME_DATOTEKE)
 
 
 ############################################################
@@ -81,7 +80,7 @@ def tekstovni_vmesnik():
             print(30 * "-")
             izbira()
             print()
-            #Model.shrani(IME_DATOTEKE)
+            Model.shrani(IME_DATOTEKE)
 
         except ValueError as e:
             print(e.args[0])
