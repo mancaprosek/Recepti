@@ -37,12 +37,8 @@ def izberi(seznam):
 
 def tvori_seznam(seznam):
     recepti = []
-    indeksi = {}
-    indeks = 0
     for recept in seznam:
         recepti.append((recept[0], recept))
-        indeksi[recept] = indeks
-        indeks += 1
         print(recept[0])
     return recepti
 
@@ -71,6 +67,7 @@ def tekstovni_vmesnik():
     print('Pozdravljeni!')
     while True:
         try:
+            print(30 * "-")
             prikazi_knjiznico()
             print('Kaj želiš storiti?')
             moznosti = [
@@ -97,20 +94,38 @@ def tekstovni_vmesnik():
 
 
 def prikazi_knjiznico():
-    for (ime, velikost, sestavine, postopek) in model.knjiznica:
-        print(ime)
+    if model.knjiznica != []:
+        print('Recepti:')
+        for (ime, velikost, sestavine, postopek) in model.knjiznica:
+            print(ime)
+        print()
+        print(30 * "-")
+        
 
 
 def dodaj_recept():
     ime = input('Ime recepta> ')
-    velikost = input('Velikost> ')
+    velikost = vnesi_stevilo('Velikost> ')
     sestavine = {}
+
+    ime_sestavine = input('Ime sestavine> ')
+    kolicina_sestavine = vnesi_stevilo('Količina sestavine>')
+    enota_sestavine = input('Enota sestavine> ')
+    sestavine[ime_sestavine] = (kolicina_sestavine, enota_sestavine)
+
+    while (input(f"Ali bi dodal še eno sestavino? [da/ne]") == "da"):
+            ime_sestavine1 = input('Ime sestavine> ')
+            kolicina_sestavine1 = vnesi_stevilo('Količina sestavine> ')
+            enota_sestavine1 = input('Enota sestavine> ')
+            sestavine[ime_sestavine1] = (kolicina_sestavine1, enota_sestavine1)
+
     postopek = input('Postopek> ')
-    Model.dodaj_recept(ime, velikost, sestavine, postopek)
+    model.dodaj_recept(ime, velikost, sestavine, postopek)
+
 
 
 def poglej_recept():
-    recepti = tvori_seznam(Model.knjiznica)
+    recepti = tvori_seznam(model.knjiznica)
 
     if recepti == []:
         print("Knjižnica receptov je prazna.")
@@ -125,8 +140,10 @@ def poglej_recept():
     
 
 def uredi_recept():
-    recepti = tvori_seznam(Model.knjiznica)
-    indeksi = pridobi_indeks(Model.knjiznica)
+    recepti = tvori_seznam(model.knjiznica)
+    indeksi = pridobi_indeks(model.knjiznica)
+
+    #tuki se neki pr indeksih zatakne, kao da je unhashable... ne stekam čist..
 
     if recepti == []:
         print("Knjižnica receptov je prazna.")
@@ -134,27 +151,46 @@ def uredi_recept():
         print("Kateri recept želiš urediti?")
         izbran_recept = izberi(recepti)
     
-    print("Kaj želiš urediti?")
-    moznosti = [
-        ("ime", uredi_ime),
-        ("velikost", uredi_velikost),
-        ("sestavine", uredi_sestavine),
-        ("postopek", uredi_postopek)
-    ]
-    izbira = izberi(moznosti)
-    ime, velikost, sestavine, postopek = izbira(izbran_recept)
+        print("Kaj želiš urediti?")
+        moznosti = [
+            ("ime", uredi_ime),
+            ("velikost", uredi_velikost),
+            ("sestavine", uredi_sestavine),
+            ("postopek", uredi_postopek)
+        ]
+        izbira = izberi(moznosti)
+        ime, velikost, sestavine, postopek = izbira(izbran_recept)
 
-    Model.izbrisi_recept(indeksi[izbran_recept])
-    Model.dodaj_recept(ime, velikost, sestavine, postopek)
+        model.izbrisi_recept(indeksi[izbran_recept])
+        model.dodaj_recept(ime, velikost, sestavine, postopek)
 
 
 def dodaj_sestavine():
-    while (input(f"Ali bi dodal sestavino? [da/ne]") == "da"):
+    recepti = tvori_seznam(model.knjiznica)
+    indeksi = pridobi_indeks(model.knjiznica)
+
+    if recepti == []:
+        print("Ni recepta, ki bi mu lahko dodal sestavine.")
+
+    else:
+        print("Kateremu receptu želiš dodati sestavine?")
+        izbran_recept = izberi(recepti)
+        i = indeksi[izbran_recept]
+
         ime = input('Ime sestavine> ')
-        kolicina = input('Količina> ')
-        Recept.dodaj_sestavino[ime] = kolicina
+        kolicina = vnesi_stevilo('Količina> ')
+        enota = input('Enota> ')
+        Recept.dodaj_sestavino(izbran_recept, ime, kolicina, enota)
 
-
+        while (input(f"Ali bi dodal še eno sestavino? [da/ne]") == "da"):
+            ime = input('Ime sestavine> ')
+            kolicina = vnesi_stevilo('Količina> ')
+            enota = input('Enota> ')
+            Recept.dodaj_sestavino(izbran_recept, ime, kolicina, enota)
+    
+#TUKI napiše   File "c:\Users\manca\OneDrive\FMF\Recepti\Recepti\model2.py", line 30, in dodaj_sestavino
+#     self.sestavine[ime] = (kolicina, enota)
+# AttributeError: 'tuple' object has no attribute 'sestavine'
 
 #########################################
 ##### Funkcije za urejanje receptov #####
@@ -170,12 +206,13 @@ def uredi_velikost(recept):
     stara_velikost = recept[1]
     nova_velikost = vnesi_stevilo("Nova velikost> ")
     slovar_sestavin = recept[2]
+    #to zaenkrat še ni slovar! ni še zrihtan!!
 
-    i = nova_velikost / stara_velikost
+    i = int(nova_velikost) / int(stara_velikost)
 
     for sestavina in slovar_sestavin.keys():
         stara_kolicina = slovar_sestavin[sestavina]
-        slovar_sestavin[sestavina] = stara_kolicina * i
+        slovar_sestavin[sestavina] = int(stara_kolicina) * i
 
     return recept[0], nova_velikost, slovar_sestavin, recept[3]
 
@@ -187,9 +224,12 @@ def uredi_sestavine(recept):
     ime = input('Vnesi ime:> ')
     novo_ime = input('Vnesi novo ime:> ')
     nova_kolicina = input('Vnesi novo količino:> ')
+    nova_enota = input('Vnesi novo enoto:>')
     recept[2].pop(ime)
-    recept[2][novo_ime] = nova_kolicina
+    recept[2][novo_ime] = (nova_kolicina, nova_enota)
     return recept[0], recept[1], recept[2], recept[3]
+
+#tuki isto ne dovoli za slovar
 
 
 def uredi_postopek(recept):
@@ -201,8 +241,8 @@ def uredi_postopek(recept):
 
 
 def izbrisi_recept():
-    recepti = tvori_seznam(Model.knjiznica)
-    indeksi = pridobi_indeks(Model.knjiznica)
+    recepti = tvori_seznam(model.knjiznica)
+    indeksi = pridobi_indeks(model.knjiznica)
 
     if recepti == []:
         print("Knjižnica receptov je prazna.")
@@ -215,7 +255,7 @@ def izbrisi_recept():
         if (
             input(f"Ali si prepričan, da želiš izbrisati recept {izbran_recept[0]}? [da/ne]") == "da"
         ):
-            Model.izbrisi_recept(i)
+            model.izbrisi_recept(i)
             print(f"Recept {izbran_recept[0]} je bil uspešno izbrisan.")
         else:
             print("Brisanje je bilo preklicano, recept ostaja shranjen.")
@@ -223,7 +263,6 @@ def izbrisi_recept():
 
 tekstovni_vmesnik()
 
-#Razredov ne zazna
-#dodaj recept more imet še en dodaten argument
-#pri dodajanju sestavin ne izbiraš recepta, kar ne more it skoz...
-#pri velikosti bi morala zahtevati samo velikost
+#Razredov ne zazna, to z modelom povezan ne štekam
+#pri dodajanju sestavin neki ni zadovoljen
+#dodajanje sestavin je še uganka, da bo lepo slovar
