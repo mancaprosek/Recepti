@@ -1,5 +1,29 @@
 <h1>Pozdravljeni!</h1>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    var st_sestavin = 1
+    function add() {
+        var ime_sestavine = "<br\>ime sestavine: <input type='text' name='ime_sestavine_" + st_sestavin + "'>";
+        $('#dodane_sestavine').append(ime_sestavine);
+
+        var kolicina_sestavine = "količina: <input type='number' name='kolicina_sestavine_" + st_sestavin + "'>";
+        $('#dodane_sestavine').append(kolicina_sestavine);
+
+        var enota_sestavine = "enota: <input type='text' name='enota_sestavine_" + st_sestavin + "'>";
+        $('#dodane_sestavine').append(enota_sestavine);
+
+        st_sestavin += 1
+    }
+
+    function remove() {
+        var last_chq_no = $('#total_chq').val();
+        if (last_chq_no > 1) {
+            $('#new_' + last_chq_no).append('');
+            $('#total_chq').val(last_chq_no - 1);
+        }
+    }
+</script>
 
 <blockquote>
 Tukaj je knjižnica shranjenih receptov in stvari, ki jih potrebuješ.
@@ -7,4 +31,40 @@ Tukaj je knjižnica shranjenih receptov in stvari, ki jih potrebuješ.
 
 <hr>
 
-<h2>V knjižnici imaš trenutno naslednje recepte: </h2><h2> {{recepti}}</h2>
+<h2>V knjižnici imaš trenutno naslednje recepte: </h2>
+<ul>
+    % for recept in recepti:
+    <li>Ime: {{recept.ime}},
+        Velikost: {{recept.velikost}},
+        Sestavine: {{recept.sestavine}},
+        Postopek: {{recept.postopek}},
+        % for sestavinak in recept.sestavine.keys():
+            Ime sestavine: {{ sestavinak }}
+            Količina: {{recept.sestavine[sestavinak][0]}} {{recept.sestavine[sestavinak][1]}}
+        % end
+
+        <form action="/uredi_recept/{{recept.id}}" method="GET">
+            <input type="submit" value="uredi">
+        </form>
+        
+        <form action="/izbrisi_recept/{{recept.id}}" method="POST">
+            <input type="submit" value="delete">
+        </form>
+    
+    </li>
+    % end
+</ul>
+
+<form action="/dodaj_recept" method="POST">
+    ime: <input type="text" name="ime">
+    velikost: <input type="number" name="velikost">
+    sestavine: 
+
+    <button type="button" onclick="add()">Add</button>
+    <button onclick="remove()">remove</button>
+    <div id="dodane_sestavine"></div>
+    <input type="hidden" value="1" id="total_chq">
+    
+    postopek: <input type="text" name="postopek">
+        <input type="submit" value="Dodaj!">
+  </form>
