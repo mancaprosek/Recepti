@@ -16,17 +16,19 @@ class Model:
         self.knjiznica.clear()
     
     
-    def v_slovar(self):
-        return {
-            'ime': self.knjiznica,
-            'recepti': [Recept.v_slovar() for recept in self.knjiznica]
-        }
+    #občutek imam, da tega sploh ne rabim v modelu... Nisem prepričanaaaa
+    # def v_slovar(self):
+    #     return {
+    #         'ime': self.knjiznica,
+    #         'recepti': [Recept.v_slovar() for recept in self.knjiznica]
+    #     }
 
-    @staticmethod
-    def iz_slovarja(slovar):
-        knjiznica = Model(slovar['ime'])
-        return knjiznica
+    # @staticmethod
+    # def iz_slovarja(slovar):
+    #     knjiznica = Model(slovar['ime'])
+    #     return knjiznica
         #***** v zapiskih
+    #tega dela vmes, da ne rabim... Ker on je dal samo v spisek in opravila....
 
 
 class Recept:
