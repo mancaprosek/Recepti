@@ -31,6 +31,20 @@ class Model:
     #tega dela vmes, da ne rabim... Ker on je dal samo v spisek in opravila....
 
 
+    def shrani(self, ime_datoteke):
+        with open(ime_datoteke, 'w') as f:
+            slovar = Recept.v_slovar()
+            json.dump(slovar, f)
+    #kjer je recept ima on self..
+
+    @staticmethod
+    def nalozi(ime_datoteke):
+        with open(ime_datoteke) as f:
+            slovar = json.load(f)
+            return Recept.iz_slovarja(slovar)
+    #tuki k je recept ima on Model...??
+
+
 class Recept:
     def __init__(self, ime, velikost, sestavine, postopek):
         self.ime = ime
