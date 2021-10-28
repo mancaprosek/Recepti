@@ -1,0 +1,68 @@
+<h1>Pozdravljeni!</h1>
+
+<blockquote>
+    Tukaj lahko urediš recept.
+</blockquote>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    var st_sestavin = 1
+    function add() {
+        var ime_sestavine = "<br\>ime sestavine: <input type='text' name='ime_sestavine_" + st_sestavin + "'>";
+        $('#dodane_sestavine').append(ime_sestavine);
+
+        var kolicina_sestavine = "količina: <input type='number' name='kolicina_sestavine_" + st_sestavin + "'>";
+        $('#dodane_sestavine').append(kolicina_sestavine);
+
+        var enota_sestavine = "enota: <input type='text' name='enota_sestavine_" + st_sestavin + "'>";
+        $('#dodane_sestavine').append(enota_sestavine);
+
+        st_sestavin += 1
+    }
+
+    function add_obstojeca(ime, kolicina, enota) {
+        console.log(ime)
+        var ime_sestavine = "<br\>ime sestavine: <input type='text' name='ime_sestavine_" + st_sestavin + "' value=" + ime +">";
+        $('#dodane_sestavine').append(ime_sestavine);
+
+        var kolicina_sestavine = "količina: <input type='number' name='kolicina_sestavine_" + st_sestavin + "' value=" + kolicina +">";
+        $('#dodane_sestavine').append(kolicina_sestavine);
+
+        var enota_sestavine = "enota: <input type='text' name='enota_sestavine_" + st_sestavin + "' value=" + enota +">";
+        $('#dodane_sestavine').append(enota_sestavine);
+
+        st_sestavin += 1
+    }
+
+    function remove() {
+        var last_chq_no = $('#total_chq').val();
+        if (last_chq_no > 1) {
+            $('#new_' + last_chq_no).append('');
+            $('#total_chq').val(last_chq_no - 1);
+        }
+    }
+</script>
+
+
+<form action="/uredi_recept/{{recept.id}}" method="POST">
+    ime: <input type="text" name="ime" value="{{recept.ime}}">
+    velikost: <input type="number" name="velikost" value="{{recept.velikost}}">
+    sestavine: 
+
+    <button type="button" onclick="add()">Add</button>
+    <button onclick="remove()">remove</button>
+    <div id="dodane_sestavine"></div>
+    <input type="hidden" value="1" id="total_chq">
+
+    % for sestavina in recept.sestavine.keys():
+        <script>
+            console.log("add_obstojeca")
+            add_obstojeca("{{sestavina}}", "{{recept.sestavine[sestavina][0]}}", "{{recept.sestavine[sestavina][1]}}") 
+
+        </script>
+    % end
+    
+    postopek: <input type="text" name="postopek" value="{{recept.postopek}}">
+        <input type="submit" value="uredi!">
+  </form>    
