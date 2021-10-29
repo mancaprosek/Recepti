@@ -16,18 +16,11 @@
         st_sestavin += 1
     }
 
-    function remove() {
-        var last_chq_no = $('#total_chq').val();
-        if (last_chq_no > 1) {
-            $('#new_' + last_chq_no).append('');
-            $('#total_chq').val(last_chq_no - 1);
-        }
-    }
 </script>
 
-<blockquote>
+<h3>
 Tukaj je knjižnica shranjenih receptov in stvari, ki jih potrebuješ.
-</blockquote>
+</h3>
 
 <hr>
 
@@ -61,10 +54,17 @@ Tukaj je knjižnica shranjenih receptov in stvari, ki jih potrebuješ.
     sestavine: 
 
     <button type="button" onclick="add()">Add</button>
-    <button onclick="remove()">remove</button>
     <div id="dodane_sestavine"></div>
     <input type="hidden" value="1" id="total_chq">
     
     postopek: <input type="text" name="postopek">
         <input type="submit" value="Dodaj!">
   </form>
+
+
+<h3>
+    Za odjavo pritisni gumb
+    <form action="/odjava" method="POST">
+            <input type="submit" value="Odjavi se">
+      </form>
+</h3>
