@@ -9,13 +9,13 @@
 <script>
     var st_sestavin = 1
     function add() {
-        var ime_sestavine = "<br\>ime sestavine: <input type='text' name='ime_sestavine_" + st_sestavin + "'>";
+        var ime_sestavine = "<div class=inline id=0_" + st_sestavin + "><br\>ime sestavine: <input type='text' name='ime_sestavine_" + st_sestavin + "'></div>";
         $('#dodane_sestavine').append(ime_sestavine);
 
-        var kolicina_sestavine = "količina: <input type='number' name='kolicina_sestavine_" + st_sestavin + "'>";
+        var kolicina_sestavine = "<div class=inline id=1_" + st_sestavin + ">količina: <input type='number' name='kolicina_sestavine_" + st_sestavin + "'></div>";
         $('#dodane_sestavine').append(kolicina_sestavine);
 
-        var enota_sestavine = "enota: <input type='text' name='enota_sestavine_" + st_sestavin + "'>";
+        var enota_sestavine = "<div class=inline id=2_" + st_sestavin + ">enota: <input type='text' name='enota_sestavine_" + st_sestavin + "'></div>";
         $('#dodane_sestavine').append(enota_sestavine);
 
         st_sestavin += 1
@@ -23,24 +23,26 @@
 
     function add_obstojeca(ime, kolicina, enota) {
         console.log(ime)
-        var ime_sestavine = "<br\>ime sestavine: <input type='text' name='ime_sestavine_" + st_sestavin + "' value=" + ime +">";
+        var ime_sestavine = "<div class='inline' id=0_" + st_sestavin + "><br\>ime sestavine: <input type='text' name='ime_sestavine_" + st_sestavin + "' value=" + ime +"></div>";
         $('#dodane_sestavine').append(ime_sestavine);
 
-        var kolicina_sestavine = "količina: <input type='number' name='kolicina_sestavine_" + st_sestavin + "' value=" + kolicina +">";
+        var kolicina_sestavine = "<div class='inline' id=1_" + st_sestavin + ">količina: <input type='number' name='kolicina_sestavine_" + st_sestavin + "' value=" + kolicina +"></div>";
         $('#dodane_sestavine').append(kolicina_sestavine);
 
-        var enota_sestavine = "enota: <input type='text' name='enota_sestavine_" + st_sestavin + "' value=" + enota +">";
+        var enota_sestavine = "<div class='inline' id=2_" + st_sestavin + ">enota: <input type='text' name='enota_sestavine_" + st_sestavin + "' value=" + enota +"></div>";
         $('#dodane_sestavine').append(enota_sestavine);
 
         st_sestavin += 1
     }
 
     function remove() {
-        var last_chq_no = $('#total_chq').val();
-        if (last_chq_no > 1) {
-            $('#new_' + last_chq_no).append('');
-            $('#total_chq').val(last_chq_no - 1);
-        }
+        st_sestavin -= 1
+        var element = document.getElementById("0_" + st_sestavin);
+        element.parentNode.removeChild(element);
+        element = document.getElementById("1_" + st_sestavin);
+        element.parentNode.removeChild(element);
+        element = document.getElementById("2_" + st_sestavin);
+        element.parentNode.removeChild(element);
     }
 </script>
 
@@ -51,7 +53,7 @@
     sestavine: 
 
     <button type="button" onclick="add()">Add</button>
-    <button onclick="remove()">remove</button>
+    <button type="button" onclick="remove()">remove</button>
     <div id="dodane_sestavine"></div>
     <input type="hidden" value="1" id="total_chq">
 
