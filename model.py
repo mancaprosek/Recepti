@@ -28,15 +28,13 @@ class Model:
             json.dump([ob.__dict__ for ob in self.knjiznica], f)
 
 
-    @staticmethod
-    def nalozi(ime_datoteke):
+    def nalozi(self, ime_datoteke):
         with open(ime_datoteke) as f:
             data = json.load(f)
             seznam = []
             for slovar in data:
                 seznam.append(Recept.iz_slovarja(slovar))
-            print("data")
-            print(data)
+            self.knjiznica = seznam
             return seznam
 
 
