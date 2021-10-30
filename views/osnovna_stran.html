@@ -1,4 +1,4 @@
-<h1>Pozdravljeni!</h1>
+<h1>Pozdravljen!</h1>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
@@ -19,7 +19,7 @@
 </script>
 
 <h3>
-Tukaj je knjižnica shranjenih receptov in stvari, ki jih potrebuješ.
+Tukaj je knjižnica receptov, ki jih imaš shranjene.
 </h3>
 
 <hr>
@@ -27,44 +27,53 @@ Tukaj je knjižnica shranjenih receptov in stvari, ki jih potrebuješ.
 <h2>V knjižnici imaš trenutno naslednje recepte: </h2>
 <ul>
     % for recept in recepti:
-    <li>Ime: {{recept.ime}},
-        Velikost: {{recept.velikost}},
-        Sestavine: {{recept.sestavine}},
-        Postopek: {{recept.postopek}},
-        % for sestavinak in recept.sestavine.keys():
-            Ime sestavine: {{ sestavinak }}
-            Količina: {{recept.sestavine[sestavinak][0]}} {{recept.sestavine[sestavinak][1]}}
-        % end
-
-        <form action="/uredi_recept/{{recept.id}}" method="GET">
-            <input type="submit" value="uredi">
-        </form>
+    <li>{{recept.ime}}
         
-        <form action="/izbrisi_recept/{{recept.id}}" method="POST">
-            <input type="submit" value="delete">
-        </form>
-    
+        <table>
+            <form action="/poglej_recept/{{recept.id}}" method="GET">
+                <input type="submit" value="poglej">
+            </form>
+            &nbsp;
+            <form action="/uredi_recept/{{recept.id}}" method="GET">
+                <input type="submit" value="uredi">
+            </form>
+            &nbsp;
+            <form action="/izbrisi_recept/{{recept.id}}" method="POST">
+                <input type="submit" value="delete">
+            </form>
+        </table>
+        <br>
     </li>
     % end
 </ul>
 
+<hr>
+
+<h3>
+Če želiš dodati recept, vpiši podatke v spodnja polja in klikni "Dodaj!".
+</h3>
+
 <form action="/dodaj_recept" method="POST">
     ime: <input type="text" name="ime">
+    <br><br>
     velikost: <input type="number" name="velikost">
+    <br><br>
     sestavine: 
 
     <button type="button" onclick="add()">Add</button>
     <div id="dodane_sestavine"></div>
     <input type="hidden" value="1" id="total_chq">
-    
+
+    <br><br>
     postopek: <input type="text" name="postopek">
         <input type="submit" value="Dodaj!">
   </form>
 
+  <hr>
 
 <h3>
     Za odjavo pritisni gumb
     <form action="/odjava" method="POST">
             <input type="submit" value="Odjavi se">
-      </form>
+    </form>
 </h3>
