@@ -87,7 +87,6 @@ def dodaj_recept():
     recept = model.dodaj_recept(ime, velikost, {}, postopek)
     tr_st_sestavin = 1
     while True:
-        print("in")
         try:
             ime_sestavine = bottle.request.forms['ime_sestavine_' + str(tr_st_sestavin)]
             kolicina_sestavine = bottle.request.forms['kolicina_sestavine_' + str(tr_st_sestavin)]
@@ -99,6 +98,7 @@ def dodaj_recept():
     model.shrani(uporabnisko_ime + ".json")
     bottle.redirect('/')
 
+
 @bottle.post('/izbrisi_recept/<id:path>')
 def izbrisi_recept(id):
     uporabnisko_ime = bottle.request.get_cookie("uporabnisko_ime", secret=SECRET)
@@ -107,15 +107,25 @@ def izbrisi_recept(id):
     bottle.redirect('/')
 
 
+
+@bottle.get('/poglej_recept/<id:path>')
+def poglej_recept(id):
+    for recept in model.knjiznica:
+        if recept.id == int(id):
+            return bottle.template("poglej_recept.html", recept=recept)
+    bottle.redirect('/')
+
+
+
 @bottle.get('/uredi_recept/<id:path>')
-def uredi_recepti(id):
+def uredi_recept(id):
     for recept in model.knjiznica:
         if recept.id == int(id):
             return bottle.template("uredi_recept.html", recept=recept)
     bottle.redirect('/')
 
 @bottle.post('/uredi_recept/<id:path>')
-def uredi_recepti(id):
+def uredi_recept(id):
     uporabnisko_ime = bottle.request.get_cookie("uporabnisko_ime", secret=SECRET)
     for recept in model.knjiznica:
         if recept.id == int(id):
@@ -126,7 +136,6 @@ def uredi_recepti(id):
             recept.sestavine = {}
             tr_st_sestavin = 1
             while True:
-                print("in")
                 try:
                     ime_sestavine = bottle.request.forms['ime_sestavine_' + str(tr_st_sestavin)]
                     kolicina_sestavine = bottle.request.forms['kolicina_sestavine_' + str(tr_st_sestavin)]
@@ -140,5 +149,37 @@ def uredi_recepti(id):
             break
     model.shrani(uporabnisko_ime + ".json")
     bottle.redirect('/')
+
+
+
+@bottle.get('/spremeni_velikost/<id:path>')
+def spremeni_velikost(id):
+    for recept in model.knjiznica:
+        if recept.id == int(id):
+            return bottle.template("spremeni_velikost.html", recept=recept)
+    bottle.redirect('/')
+
+
+@bottle.post('/spremeni_velikost/<id:path>')
+def spremeni_velikost(id):
+    uporabnisko_ime = bottle.request.get_cookie("uporabnisko_ime", secret=SECRET)
+    for recept in model.knjiznica:
+        if recept.id == int(id):
+            stara_velikost = recept.velikost
+            recept.velikost = bottle.request.forms['velikost']
+            i = int(recept.velikost) / int(stara_velikost)
+
+            for ime_sestavine in recept.sestavine.keys():
+                nova_kolicina = int(recept.sestavine[ime_sestavine][0]) * i
+                recept.sestavine[ime_sestavine][0] = str(round(nova_kolicina))
+
+
+            break
+
+    model.shrani(uporabnisko_ime + ".json")
+    bottle.redirect('/')
+
+
+
 
 bottle.run(reloader=True, debug=True)
