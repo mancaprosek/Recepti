@@ -149,7 +149,8 @@ def uredi_recept():
             ("ime", uredi_ime),
             ("velikost", uredi_velikost),
             ("sestavine", uredi_sestavine),
-            ("postopek", uredi_postopek)
+            ("postopek", uredi_postopek),
+            ("spremeniti količino", spremeni_kolicino)
         ]
         izbira = izberi(moznosti)
         ime, velikost, sestavine, postopek = izbira(izbran_recept)
@@ -190,6 +191,12 @@ def uredi_ime(recept):
 
 def uredi_velikost(recept):
     print(recept.velikost)
+    velikost = input('Nova velikost> ')
+    return recept.ime, velikost, recept.sestavine, recept.postopek
+
+
+def spremeni_kolicino(recept):
+    print(recept.velikost)
     stara_velikost = recept.velikost
     nova_velikost = vnesi_stevilo("Nova velikost> ")
     slovar_sestavin = recept.sestavine
@@ -197,8 +204,8 @@ def uredi_velikost(recept):
     i = int(nova_velikost) / int(stara_velikost)
 
     for sestavina in slovar_sestavin.keys():
-        stara_kolicina = slovar_sestavin[sestavina]
-        slovar_sestavin[sestavina] = int(stara_kolicina) * i
+        stara_kolicina = slovar_sestavin[sestavina][0]
+        slovar_sestavin[sestavina][0] = int(stara_kolicina) * i
 
     return recept.ime, nova_velikost, slovar_sestavin, recept.postopek
 
