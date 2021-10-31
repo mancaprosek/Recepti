@@ -1,4 +1,9 @@
 # Recepti
 Projektna naloga pri predmetu Uvod v programiranje.
 
-V njem bo imel uporabnik knjižnico svojih receptov. V knjižnico si bo lahko shranil recept, in sicer tako, da bo zapisal potrebne sestavine in njihovo količino, postopek ter podatek, kako velik pekač bo uporabljal ali za koliko ljudi bo. Napisane recepte bo lahko tudi urejal in s tem preračunal, koliko katere sestavine potrebuje za drugačno velikost pekača oziroma količino peciva.
+NAVODILA ZA UPORABO
+Za uporabo programa potrebuješ naložen Visual Studio Code in prenesene datoteke iz rezpozitorija Recepti, shranjene v eni mapi. V Visual Studio Code-u odpri mapo z datotekami in nato datoteko spletni_vmesnik.py. Pythonovo datoteko poženi v terminalu in odpri spletno povezavo, ki ti jo izpiše. Na povezavi se bo odprla začetna stran mojega programa, imenovanega Recepti.
+
+Na začetni strani se najprej registriraš ali pa prijaviš, če že imaš svoj račun. Odpre se tvoja knjižnica receptov, kjer se najprej izpiše seznam že shranjenih, spodaj pa je gumb za dodajanje novih. Vsakemu receptu lahko dodaš ime, velikost, za kolikšno količino je namenjen, sestavine, ki jim pripišeš ime, količino in enoto količine, ter postopek, kako to pecivo ali jed pripraviš.
+Ob vsakem receptu je tudi gumb, ki ti omogoča, da pogledaš vse podatke o receptu. Tam imaš poleg pregleda celotnega recepta na voljo tudi urejanje recpeta, brisanje recepta in spreminjanje velikosti recepta, ki ti preračuna tudi količino posamezne sestavine, ki bo potrebna za drugačno količino recepta.
+Ko zaključiš z uporabo, se iz svojega računa odjaviš v zgornjem desnem kotu.
