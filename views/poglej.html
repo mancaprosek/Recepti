@@ -1,0 +1,34 @@
+% rebase('base.html')
+
+<div class="content">
+<h1>{{recept.ime}}</h1>
+    <ul>
+        <li>Velikost: {{recept.velikost}}</li>
+        <li>Sestavine:
+            <ul>
+                % for sestavinak in recept.sestavine.keys():
+                    <li>{{ sestavinak }}, {{recept.sestavine[sestavinak][0]}} {{recept.sestavine[sestavinak][1]}}</li>
+                % end
+            </ul>
+        </li>
+        <li>Postopek:<br>{{recept.postopek}}</li>
+    </ul>
+</div>
+
+<div class="field">
+    <form method="GET", action="/spremeni_velikost/{{recept.id}}">
+        <button class="button is-link is-warning">Spremeni velikost</button>
+    </form>
+    &nbsp;
+    <form method="GET", action="/uredi_recept/{{recept.id}}">
+        <button class="button is-link is-warning">Uredi</button>
+    </form>
+    &nbsp;
+    <form method="POST", action="/izbrisi_recept/{{recept.id}}">
+        <button class="button is-link is-warning">Izbriši</button>
+    </form>
+    &nbsp;
+    <form method="GET", action="/" >
+        <button class="button is-link is-warning">Nazaj</button>
+    </form>
+</div>

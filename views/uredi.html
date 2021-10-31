@@ -1,0 +1,91 @@
+% rebase('base.html')
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    var st_sestavin = 1
+    function add() {
+        var ime_sestavine = "<div class=inline id=0_" + st_sestavin + "><br\>ime sestavine: <input type='text' name='ime_sestavine_" + st_sestavin + "'></div>";
+        $('#dodane_sestavine').append(ime_sestavine);
+
+        var kolicina_sestavine = "<div class=inline id=1_" + st_sestavin + ">količina: <input type='number' name='kolicina_sestavine_" + st_sestavin + "'></div>";
+        $('#dodane_sestavine').append(kolicina_sestavine);
+
+        var enota_sestavine = "<div class=inline id=2_" + st_sestavin + ">enota: <input type='text' name='enota_sestavine_" + st_sestavin + "'></div>";
+        $('#dodane_sestavine').append(enota_sestavine);
+
+        st_sestavin += 1
+    }
+
+    function add_obstojeca(ime, kolicina, enota) {
+        console.log(ime)
+        var ime_sestavine = "<div class='inline' id=0_" + st_sestavin + "><br\>ime sestavine: <input type='text' name='ime_sestavine_" + st_sestavin + "' value=" + ime +"></div>";
+        $('#dodane_sestavine').append(ime_sestavine);
+
+        var kolicina_sestavine = "<div class='inline' id=1_" + st_sestavin + ">količina: <input type='number' name='kolicina_sestavine_" + st_sestavin + "' value=" + kolicina +"></div>";
+        $('#dodane_sestavine').append(kolicina_sestavine);
+
+        var enota_sestavine = "<div class='inline' id=2_" + st_sestavin + ">enota: <input type='text' name='enota_sestavine_" + st_sestavin + "' value=" + enota +"></div>";
+        $('#dodane_sestavine').append(enota_sestavine);
+
+        st_sestavin += 1
+    }
+
+    function remove() {
+        st_sestavin -= 1
+        var element = document.getElementById("0_" + st_sestavin);
+        element.parentNode.removeChild(element);
+        element = document.getElementById("1_" + st_sestavin);
+        element.parentNode.removeChild(element);
+        element = document.getElementById("2_" + st_sestavin);
+        element.parentNode.removeChild(element);
+    }
+</script>
+
+<form method="POST">
+    <div class="field">
+        <label class="label">Ime</label>
+        <div class="control has-icons-left has-icons-right">
+            <input class="input" name="ime" type="text" value="{{recept.ime}}">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Velikost</label>
+        <div class="control has-icons-left has-icons-right">
+            <input class="input" name="velikost" type="number" value="{{recept.velikost}}">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Sestavine</label>
+        <button class="button is-warning is-light" type="button" onclick="add()">Dodaj sestavino</button>
+        <button class="button is-warning is-light" type="button" onclick="remove()">Odstrani sestavino</button>
+        <div id="dodane_sestavine"></div>
+        <input type="hidden" value="1" id="total_chq">
+    
+        % for sestavina in recept.sestavine.keys():
+            <script>
+                console.log("add_obstojeca")
+                add_obstojeca("{{sestavina}}", "{{recept.sestavine[sestavina][0]}}", "{{recept.sestavine[sestavina][1]}}") 
+    
+            </script>
+        % end
+    </div>
+
+    <div class="field">
+        <label class="label">Postopek</label>
+        <div class="control has-icons-left has-icons-right">
+            <input class="input" name="postopek" type="text" value="{{recept.postopek}}">
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <form method="POST", action="/">     
+            <button class="button is-link is-warning">Shrani</button>
+        </form>
+
+        <form method="GET", action="/">     
+            <button class="button is-link is-warning is-light">Prekliči</button>
+        </form>
+    </div>
+</form>

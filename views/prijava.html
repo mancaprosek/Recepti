@@ -1,0 +1,22 @@
+% rebase('base.html')
+<form method="POST">
+    <div class="field">
+        <h2>Če že imaš račun, se lahko spodaj prijaviš. Če pa svojega računa še nimaš, se najprej registriraj.</h2>
+        <br>
+        <label class="label">Uporabniško ime</label>
+        <div class="control has-icons-left has-icons-right">
+            <input class="input" name="uporabnisko_ime" type="text" placeholder="Uporabniško ime" value="{{polja.get('uporabnisko_ime', '')}}">
+            <span class="icon is-small is-left">
+                <i class="fas fa-clipboard-check"></i>
+            </span>
+        </div>
+        % if "uporabnisko_ime" in napake:
+        <p class="help is-danger">{{ napake["uporabnisko_ime"] }}</p>
+        % end
+    </div>
+    <div class="field is-grouped">
+        <div class="control">
+            <button class="button is-link is-warning">Prijavi se</button>
+        </div>
+    </div>
+</form>

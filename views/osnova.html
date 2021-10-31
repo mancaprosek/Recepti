@@ -1,0 +1,25 @@
+% rebase('base.html')
+
+<table>
+    <div class="content">
+        <h2>{{ uporabnisko_ime }}, v tvoji knjižnici so trenutno naslednji recepti:</h2>
+
+        <ul>
+            % for recept in recepti:
+                <li>
+                    {{recept.ime}}
+                    <form method="GET", action="/poglej_recept/{{recept.id}}">
+                        <button class="button is-link is-warning is-light is-small">Poglej</button>
+                    </form>
+                </li>
+            % end
+        </ul>
+
+    </div>
+    <br>
+
+    <form method="GET", action="/dodaj_recept">     
+        <button class="button is-link is-warning">Dodaj nov recept</button>
+    </form>
+
+</table>

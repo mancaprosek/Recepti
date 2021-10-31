@@ -1,0 +1,23 @@
+% rebase('base.html')
+
+<form method="POST">
+    <div class="field">
+
+        <label class="label">{{recept.ime}}</label>
+        Stara velikost: {{recept.velikost}}
+
+        <label class="label">Nova velikost</label>
+        <div class="control has-icons-left has-icons-right">
+            <input class="input" name="n_velikost" type="number" value="">
+        </div>
+    </div>
+
+    <div class="field is-grouped">
+        <form method="POST", action="/">     
+            <button class="button is-link is-warning">Shrani</button>
+        </form>
+
+        <form method="GET", action="/">     
+            <button class="button is-link is-warning is-light">Prekliči</button>
+        </form>
+</form>
