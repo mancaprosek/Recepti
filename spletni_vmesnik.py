@@ -27,7 +27,7 @@ def shrani_stanje():
 @bottle.get('/')
 def osnovna_stran():
     stanje = nalozi_stanje()
-    return bottle.template("osnova.html", recepti=stanje, uporabnisko_ime=bottle.request.get_cookie("uporabnisko_ime", secret=SECRET))
+    return bottle.template("osnovna_stran.html", recepti=stanje, uporabnisko_ime=bottle.request.get_cookie("uporabnisko_ime", secret=SECRET))
 
 
 
@@ -115,7 +115,7 @@ def izbrisi_recept(id):
 def poglej_recept(id):
     for recept in model.knjiznica:
         if recept.id == int(id):
-            return bottle.template("poglej.html", recept=recept, uporabnisko_ime=bottle.request.get_cookie("uporabnisko_ime", secret=SECRET))
+            return bottle.template("poglej_recept.html", recept=recept, uporabnisko_ime=bottle.request.get_cookie("uporabnisko_ime", secret=SECRET))
     bottle.redirect('/')
 
 
@@ -124,7 +124,7 @@ def poglej_recept(id):
 def uredi_recept_get(id):
     for recept in model.knjiznica:
         if recept.id == int(id):
-            return bottle.template("uredi.html", recept=recept, uporabnisko_ime=bottle.request.get_cookie("uporabnisko_ime", secret=SECRET))
+            return bottle.template("uredi_recept.html", recept=recept, uporabnisko_ime=bottle.request.get_cookie("uporabnisko_ime", secret=SECRET))
     bottle.redirect('/')
 
 @bottle.post('/uredi_recept/<id:path>')
@@ -159,7 +159,7 @@ def uredi_recept_post(id):
 def spremeni_velikost(id):
     for recept in model.knjiznica:
         if recept.id == int(id):
-            return bottle.template("spremeni_vk.html", recept=recept, uporabnisko_ime=bottle.request.get_cookie("uporabnisko_ime", secret=SECRET))
+            return bottle.template("spremeni_velikost.html", recept=recept, uporabnisko_ime=bottle.request.get_cookie("uporabnisko_ime", secret=SECRET))
     bottle.redirect('/')
 
 
