@@ -15,14 +15,13 @@ class Model:
         self.knjiznica.pop(indeks)
 
     def izbrisi_recept_id(self, id):
-        ind = 0
+        stevilo = 0
         for idx, recept in enumerate(self.knjiznica):
-            if recept.id == id:
-                ind = idx
+            if recept.id == int(id):
+                stevilo = idx
                 break
-        self.knjiznica.pop(ind)
+        self.knjiznica.pop(stevilo)
                 
-    
     def shrani(self, ime_datoteke):
         with open(ime_datoteke, 'w') as f:
             json.dump([ob.__dict__ for ob in self.knjiznica], f)
@@ -48,7 +47,6 @@ class Recept:
 
 
     def dodaj_sestavino(self, ime, kolicina, enota):
-        sestavina = Sestavina(ime, kolicina, enota)
         self.sestavine[ime] = (kolicina, enota)
 
 
@@ -61,10 +59,3 @@ class Recept:
             slovar['sestavine'],
             slovar['postopek']
         )
-
-
-class Sestavina:
-    def __init__(self, ime, kolicina, enota):
-        self.ime = ime
-        self.kolicina = kolicina
-        self.enota = enota
