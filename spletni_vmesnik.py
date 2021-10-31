@@ -23,12 +23,10 @@ def shrani_stanje():
 
 
 
-
 @bottle.get('/')
 def osnovna_stran():
     stanje = nalozi_stanje()
     return bottle.template("osnovna_stran.html", recepti=stanje, uporabnisko_ime=bottle.request.get_cookie("uporabnisko_ime", secret=SECRET))
-
 
 
 
@@ -79,13 +77,13 @@ def odjava_post():
 def dodaj_recept_get():
     return bottle.template("dodaj_recept.html", uporabnisko_ime=bottle.request.get_cookie("uporabnisko_ime", secret=SECRET))
 
+
 @bottle.post('/dodaj_recept')
 def dodaj_recept():
     uporabnisko_ime = bottle.request.get_cookie("uporabnisko_ime", secret=SECRET)
     ime = bottle.request.forms['ime']
     velikost = bottle.request.forms['velikost']
     postopek = bottle.request.forms['postopek']
-    print(ime)
 
     recept = model.dodaj_recept(ime, velikost, {}, postopek)
     tr_st_sestavin = 1
@@ -100,6 +98,7 @@ def dodaj_recept():
         tr_st_sestavin += 1
     model.shrani(uporabnisko_ime + ".json")
     bottle.redirect('/')
+
 
 
 @bottle.post('/izbrisi_recept/<id:path>')
@@ -127,6 +126,7 @@ def uredi_recept_get(id):
             return bottle.template("uredi_recept.html", recept=recept, uporabnisko_ime=bottle.request.get_cookie("uporabnisko_ime", secret=SECRET))
     bottle.redirect('/')
 
+
 @bottle.post('/uredi_recept/<id:path>')
 def uredi_recept_post(id):
     uporabnisko_ime = bottle.request.get_cookie("uporabnisko_ime", secret=SECRET)
@@ -147,7 +147,6 @@ def uredi_recept_post(id):
                 except:
                     break
                 tr_st_sestavin += 1
-
 
             break
     model.shrani(uporabnisko_ime + ".json")
@@ -177,7 +176,6 @@ def spremeni_velikost(id):
                 recept.sestavine[ime_sestavine][0] = str(round(nova_kolicina))
 
             break
-
     model.shrani(uporabnisko_ime + ".json")
     bottle.redirect('/')
 

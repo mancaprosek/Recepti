@@ -1,4 +1,4 @@
-from model import Model, Recept, Sestavina
+from model import Model, Recept
 
 IME_DATOTEKE = 'stanje.json'
 model = Model(IME_DATOTEKE)
@@ -159,6 +159,7 @@ def uredi_recept():
         model.dodaj_recept(ime, velikost, sestavine, postopek)
 
 
+
 def dodaj_sestavine():
     recepti = tvori_seznam(model.knjiznica)
     indeksi = pridobi_indeks(model.knjiznica)
@@ -182,6 +183,7 @@ def dodaj_sestavine():
             enota = input('Enota> ')
             Recept.dodaj_sestavino(izbran_recept, ime, kolicina, enota)
             
+
 
 def uredi_ime(recept):
     print(recept.ime)
@@ -249,6 +251,7 @@ def izbrisi_recept():
             print(f"Recept {izbran_recept.ime} je bil uspešno izbrisan.")
         else:
             print("Brisanje je bilo preklicano, recept ostaja shranjen.")
+
 
 
 
