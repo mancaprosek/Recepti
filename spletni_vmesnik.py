@@ -2,9 +2,7 @@ import bottle
 import os
 
 from model import Model
-IME_DATOTEKE = 'stanje.json'
-model = Model(IME_DATOTEKE)
-
+model = Model('stanje.json')
 SECRET = 'manca'
 
 
@@ -39,12 +37,13 @@ def registracija_get():
 
 @bottle.post('/registracija')
 def registracija_post():
+    model = Model('stanje.json')
     uporabnisko_ime = bottle.request.forms.getunicode("uporabnisko_ime")
     if os.path.exists(str(uporabnisko_ime)):
         napake = {"uporabnisko_ime": "Uporabniško ime je že zasedeno."}
         return bottle.template("prijava_registracija.html", napake=napake, polja={"uporabnisko_ime": uporabnisko_ime}, uporabnisko_ime=None)
     else:
-        bottle.response.set_cookie("uporabnisko_ime", uporabnisko_ime, path="/", secret=SECRET)
+        bottle.response.set_cookie("uporabnisko_ime", uporabnisko_ime, path='/', secret=SECRET)
         model.shrani(uporabnisko_ime + ".json")
         bottle.redirect('/')
 
@@ -62,14 +61,14 @@ def prijava_post():
         napake = {"uporabnisko_ime": "Uporabniško ime ne obstaja."}
         return bottle.template("prijava_registracija.html", napake=napake, polja={"uporabnisko_ime": uporabnisko_ime}, uporabnisko_ime=None)
     else:
-        bottle.response.set_cookie("uporabnisko_ime", uporabnisko_ime, path="/", secret=SECRET)
+        bottle.response.set_cookie("uporabnisko_ime", uporabnisko_ime, path='/', secret=SECRET)
         bottle.redirect('/')
 
 
 
 @bottle.post('/odjava')
 def odjava_post():
-    bottle.response.delete_cookie("uporabnisko_ime", path="/", secret=SECRET)
+    bottle.response.delete_cookie("uporabnisko_ime", path='/', secret=SECRET)
     bottle.redirect('/')
 
 
